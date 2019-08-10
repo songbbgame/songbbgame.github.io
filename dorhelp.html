@@ -1,0 +1,370 @@
+<!doctype html>
+<html><head>
+<meta charset="utf-8">
+<title>Songbb</title>
+
+<style>
+
+.biaommti {
+	font-size: 10px;
+	text-align: center;
+	color:rgba(92,240,87,1.00);
+	text-shadow:
+		1px 1px 0px rgba(92,240,87,1.00),
+		2px 2px 0px rgba(82,230,77,1.00),
+		3px 3px 0px rgba(72,220,67,1.00),
+		4px 4px 0px rgba(62,210,57,1.00),
+		5px 5px 0px rgba(52,200,47,1.00),
+		5px 5px 20px rgba(5,5,5,1.00);
+	}
+
+canvas {
+    position: absolute;
+    width: 100%;
+    z-index: -1;
+    margin: 0 auto;
+
+}
+
+body {
+	
+    position: absolute;
+    width:100%;
+    height: 100%;
+    content-zooming: none;
+	margin: 0px;
+	padding: :0px;
+}
+
+
+.buttong {
+	 width: 60%;
+	background-color: rgba(64,227,0,1.00);
+	border:none;
+	border-radius: 20%;
+	font-size: 110px;
+	color:azure;
+	text-shadow: 0 0 10px #fff;
+	box-shadow: 
+		0px 15px 1px rgba(54,217,0,1.00),
+		0px 15px 20px rgba(55,55,55,1.00);
+}
+.buttong:active {
+	background-color: rgba(44,207,0,1.00);
+	box-shadow: 
+		0px 1px 5px rgba(64,227,0,1.00),
+		0px 1px 20px rgba(55,55,55,1.00);; 
+	transform: translateY(15px);
+
+}
+
+
+.buttonr {
+	 width: 60%;
+	background-color: rgba(236,66,66,1.00);
+	border:none;
+	border-radius: 20%;
+	font-size: 110px;
+	color:azure;
+	text-shadow: 0 0 10px #fff;
+	box-shadow: 
+		0px 15px 1px rgba(216,46,46,1.00),
+		0px 15px 20px rgba(55,55,55,1.00);
+}
+.buttonr:active {
+	background-color: rgba(216,46,46,1.00);
+	box-shadow: 
+		0px 1px 5px rgba(64,227,0,1.00),
+		0px 1px 20px rgba(55,55,55,1.00);; 
+	transform: translateY(15px);
+
+}
+
+.buttonb {
+	 width: 60%;
+	background-color: rgba(66,168,238,1.00);
+	border:none;
+	border-radius: 20%;
+	font-size: 110px;
+	color:azure;
+	text-shadow: 0 0 10px #fff;
+	box-shadow: 
+		0px 15px 1px rgba(46,148,218,1.00),
+		0px 15px 20px rgba(55,55,55,1.00);
+}
+.buttonb:active {
+	background-color: rgba(46,148,218,1.00);
+	box-shadow: 
+		0px 1px 5px rgba(66,168,238,1.00),
+		0px 1px 20px rgba(55,55,55,1.00);; 
+	transform: translateY(15px);
+
+}
+
+.buttony {
+	 width: 60%;
+	background-color: rgba(235,153,32,1.00);
+	border:none;
+	border-radius: 20%;
+	font-size: 110px;
+	color:azure;
+	text-shadow: 0 0 10px #fff;
+	box-shadow: 
+		0px 15px 1px rgba(215,133,12,1.00),
+		0px 15px 20px rgba(55,55,55,1.00);
+}
+.buttony:active {
+	background-color: rgba(215,133,12,1.00);
+	box-shadow: 
+		0px 1px 5px rgba(215,133,12,1.00),
+		0px 1px 20px rgba(55,55,55,1.00);; 
+	transform: translateY(15px);
+
+}
+
+.buttonback {
+	
+	background-color: rgba(116,141,168,0.70);
+	border:none;
+	border-radius: 20%;
+	font-size: 50px;
+	color:azure;
+	text-shadow: 0 0 10px #fff;
+	box-shadow: 
+		0px 15px 1px rgba(65,82,101,0.70),
+		0px 7px 60px rgba(255,255,255,1.00),
+		0px 7px 60px rgba(255,255,255,1.00);
+}
+.buttonback:active {
+	background-color: rgba(96,121,148,1.00);
+	box-shadow: 
+		0px 1px 5px rgba(70,88,107,0.70),
+		0px 1px 20px rgba(55,55,55,0.70);; 
+	transform: translateY(15px);
+
+}
+
+
+
+
+
+.btt {
+}
+
+#biaoti {
+	text-align: center;
+	color:rgba(255,255,255,1.00);
+	background-color: rgba(0,255,63,0.71);
+	
+	text-shadow:
+		0px 0px 20px rgba(255,255,255,1.00),
+		0px 0px 10px rgba(255,255,255,1.00);
+}
+	
+	
+	#zw {
+	
+	color:rgba(255,255,255,1.00);
+		background-color: rgba(0,255,63,0.71);
+	text-shadow:
+		1px 1px 3px rgba(255,255,255,1.00);
+}
+
+div {}
+
+
+
+html {
+	height:100%;
+}
+
+	p{
+		
+		
+	}
+	
+</style>
+
+</head>
+
+<body>
+<canvas width="1000" height="6000" id="myCanvas" style="&#10;background: #000;&#10;"> </canvas>
+
+	<br><br>
+<div id="biaoti" style="font-size: 508px;">帮助</div>
+	<br><br><br>
+<div id="zw" style="font-size: 80px;">
+	
+	&nbsp;&nbsp;&nbsp;&nbsp;游戏操作方法
+	<br>拖动左侧方块来移动,滑动屏幕右侧来转向,点击屏幕右下角来跳跃,将屏幕中心白色圆点准心对准画有[?]的小纸条,停留两秒后打开纸条得到线索和关于下一张纸条位置的线索.
+	
+	<br><br><br>
+	
+	&nbsp;&nbsp;&nbsp;&nbsp;如何使游戏更流畅?<br>1:(重要)打开手机设置,搜索省电模式,找到并关闭.<br>2:关闭其他的应用<br>3:(华为手机)进入华为官方"游戏助手",添加应用并选择"游戏模式".<br>4:换更好的手机
+	<br><br><br>
+	&nbsp;&nbsp;&nbsp;&nbsp;画面异常?
+	<br>大概率是真实画质滤镜出现问题,可以进入游戏内设置,选择兼容模式画质.
+	
+	<br><br><br>
+	&nbsp;&nbsp;&nbsp;&nbsp;无法通关?
+	<br>
+	想与其他和你一样不知所措的玩家交流游戏通关方法,互相帮助吗?点击下方按钮.
+	<a href="http://qm.qq.com/cgi-bin/qm/qr?k=SkRUuZ1deQP1Aa6Tj_JcsRGRodwpvoF8">
+	<br><input class="buttonback" id="btg" type="button" value="寻找其他玩家">
+</a><br><br>
+	<br><br><br>
+	&nbsp;&nbsp;&nbsp;&nbsp;其他问题
+	<br>qq群 788355784 专业人士尽力为您解决.
+	<br><br>
+	</div>
+	<br><br><br><br>
+	
+	
+
+	<script>
+	
+		var bt=document.getElementById("biaoti");
+		bt. style.fontSize=(document.documentElement.offsetWidth || document.body.offsetWidth)*0.25+"px";
+		
+		var zww=document.getElementById("zw");
+		zww.style.fontSize=(document.documentElement.offsetWidth || document.body.offsetWidth)*0.07+"px";
+			</script>
+			
+		<br><br><br><br><br>
+		<br><br><br><br><br>
+		
+	
+	
+	
+<script>
+var c=document.getElementById("myCanvas");
+//c.height=c.height;
+var ww= c.width;
+var hh= c.height;
+var ctx=c.getContext("2d");
+ctx.fillStyle='rgba(97,130,64,1)';
+
+ctx.fillRect(0,0,1000,6000);
+var sj= 0.5;
+
+if(sj>0.33){
+ctx.fillStyle='rgba(0,0,0,1)';
+ctx.fillRect(0,0,1000,6000);
+ctx.shadowColor='rgba(255,255,255,1)';
+ctx.shadowBlur=10;
+for(var a=0;a<500;a=a+1)
+{
+var sr= Math.random();
+sr = Math.ceil(sr*2000)%255 
+var sg= Math.random();
+sg = Math.ceil(sg*2000)%255; 
+var sb= Math.random();
+sb= Math.ceil(sb*2000)%255; 
+ctx.fillStyle='rgba('+sr+','+sg+','+sb+',1)';
+var number = Math.random();
+number = Math.ceil(number*20000)%ww; 
+var nn= Math.random();
+nn= Math.ceil(nn*20000)%hh; 
+	
+	ctx.shadowColor='rgba('+sr+','+sg+','+sb+',1)';
+ctx.shadowBlur=35;
+	
+ctx.fillRect(number-5,nn-5,5,100);
+	ctx.fillRect(number-5,nn-5,5,100);
+	ctx.fillRect(number-5,nn-5,5,100);
+}
+var ds=10;
+
+
+}
+
+
+var myVar=setInterval(function(){myTimer()},20);
+
+var js=1;
+var ds=5;
+function myTimer(){
+    var d=new Date();
+    var t=d.toLocaleTimeString();
+
+js=js+1;
+	
+	
+	
+	
+if(sj>0.33){
+if(sj<0.66){
+	
+	
+if(js<11){
+for(var dx=0;dx<1000/ds;dx=dx+1)
+;
+}
+	
+	if(js>11&&js<13){
+		ctx.shadowColor="rgba(131,242,127,0.50)";
+ctx.shadowBlur=35;
+	var sdx= Math.random();
+		sdx = Math.ceil(sdx*2000)%200;
+		ctx.strokeStyle="rgba(131,242,127,0.50)";
+		ctx.lineJoin="round";
+		ctx.lineWidth=10;
+		ctx.beginPath();
+		var ssx= Math.random();
+		ssx = Math.ceil(ssx*6000)%1000;
+		var ssy= Math.random();
+		ssy = Math.ceil(ssy*6000)%6000;
+		var sss= Math.random();
+		sss = Math.ceil(sss*2000)%200;
+		
+		ctx.moveTo(ssx,ssy);
+		ctx.lineTo(ssx+sss,ssy);
+		ctx.lineTo(ssx+sss*0.5,ssy+sss*0.85);
+		ctx.lineTo(ssx,ssy);
+		ctx.lineTo(ssx+sss*0.5,ssy+sss*0.35);//center
+		ctx.lineTo(ssx+sss,ssy);
+		ctx.lineTo(ssx+sss*0.5,ssy+sss*0.35);
+		ctx.lineTo(ssx+sss*0.5,ssy+sss*0.85);
+		ctx.closePath();
+		ctx.stroke();
+	}
+	if(js>101&&js%300==0){
+		ctx.shadowColor="rgba(131,242,127,0.50)";
+ctx.shadowBlur=35;
+	var sdx= Math.random();
+		sdx = Math.ceil(sdx*2000)%200;
+		ctx.strokeStyle="rgba(131,242,127,0.50)";
+		ctx.lineJoin="round";
+		ctx.lineWidth=10;
+		ctx.beginPath();
+		var ssx= Math.random();
+		ssx = Math.ceil(ssx*6000)%1000;
+		var ssy= Math.random();
+		ssy = Math.ceil(ssy*6000)%6000;
+		var sss= Math.random();
+		sss = Math.ceil(sss*2000)%200;
+		
+		ctx.moveTo(ssx,ssy);
+		ctx.lineTo(ssx+sss,ssy);
+		ctx.lineTo(ssx+sss*0.5,ssy+sss*0.85);
+		ctx.lineTo(ssx,ssy);
+		ctx.lineTo(ssx+sss*0.5,ssy+sss*0.35);//center
+		ctx.lineTo(ssx+sss,ssy);
+		ctx.lineTo(ssx+sss*0.5,ssy+sss*0.35);
+		ctx.lineTo(ssx+sss*0.5,ssy+sss*0.85);
+		ctx.closePath();
+		ctx.stroke();
+	}
+	
+	
+	
+}
+}
+}
+
+
+</script>
+
+
+
+</body></html>
