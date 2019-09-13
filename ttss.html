@@ -1,0 +1,387 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>ss</title>
+</head>
+	<style>
+		.body
+		{
+			height:9999px;
+			position: absolute;
+			cursor: pointer;
+			
+			overflow-y: auto; 
+		}
+	#fps{
+	color: rgba(137,137,137,0.45);
+}
+		#log{
+	color: rgba(33,33,33,0.85);
+}
+		#tt{
+	color: rgba(47,43,43,1.00);
+	background-color: rgba(47,43,43,0.20);
+}
+			#bk{
+	color: rgba(47,43,43,1.00);
+	background-color: rgba(47,43,43,0.20);
+}
+		
+		#bk2{
+	color: rgba(47,43,43,1.00);
+	background-color: rgba(47,43,43,0.20);
+}
+		#an{
+	color: rgba(47,43,43,1.00);
+	background-color: rgba(47,43,43,0.20);
+}
+		#data{
+	color: rgba(47,43,43,1.00);
+	background-color: rgba(47,43,43,0.20);
+}
+		
+		
+		</style>
+
+<body id="bd" >
+<p id="fps">fps:97</p>
+<center><p id="log">游戏开始后，当颜色停止变化或闪动时尽可能快地点击屏幕。反应速度以毫秒为单位，越小越好！</p></center>
+<div id="kt">
+	<center>
+		<p id="bt">天天手速</p>
+		
+	<p id="tt" OnClick="start()">开始测试</p>
+	
+	<p id="data" OnClick="opendata()">查看日志</p>
+		
+	
+	</center></div>
+	
+	
+	
+	<div id="dt">
+	<center>
+		
+		
+	<p id="bk2" OnClick="closedata()">返回</p>
+	<p id="datatext"  style="overflow-y:auto; overflow-x:auto; width:400px; height:400px;">aaaa</p>
+	
+	</center></div>
+	
+	<p id="an" OnClick="c()"><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+	<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br></p>
+	
+	<p id="bk" OnClick="end()">返回</p>
+	
+	
+<footer style="bottom:0;color: rgba(51,78,59,0.48);">songbbgame-songbb<br> 建议前往TapTap平台下载。</footer>
+	
+<script>    
+//localStorage.clear(); 
+	window.onunload = function () { };
+	document.getElementById("an").style.visibility='hidden';
+		document.getElementById("an").style="display:none;"; 
+	
+	document.getElementById("bk").style.visibility='hidden';
+		document.getElementById("bk").style="display:none;"; 
+	
+		document.getElementById("dt").style.visibility='hidden';
+		document.getElementById("dt").style="display:none;"; 
+	
+	
+	
+		var bt=document.getElementById("bt");
+		bt. style.fontSize=(document.documentElement.offsetWidth || document.body.offsetWidth)*0.2+"px";
+		 
+		var bt=document.getElementById("fps");
+		bt. style.fontSize=(document.documentElement.offsetWidth || document.body.offsetWidth)*0.05+"px";
+	
+	var bt=document.getElementById("log");
+		bt. style.fontSize=(document.documentElement.offsetWidth || document.body.offsetWidth)*0.05+"px";
+		
+		var bt=document.getElementById("tt");
+		bt. style.fontSize=(document.documentElement.offsetWidth || document.body.offsetWidth)*0.1+"px";
+		
+		var bt=document.getElementById("data");
+		bt. style.fontSize=(document.documentElement.offsetWidth || document.body.offsetWidth)*0.1+"px";
+	
+	var bt=document.getElementById("an");
+		bt. style.fontSize=(document.documentElement.offsetWidth || document.body.offsetWidth)*0.1+"px";
+		
+		var bt=document.getElementById("bk");
+		bt. style.fontSize=(document.documentElement.offsetWidth || document.body.offsetWidth)*0.1+"px";
+		
+	
+	var bt=document.getElementById("datatext");
+		bt. style.fontSize=(document.documentElement.offsetWidth || document.body.offsetWidth)*0.06+"px";
+		bt. style.width=(document.documentElement.offsetWidth || document.body.offsetWidth)*0.9+"px";
+	bt. style.height=(document.documentElement.offsetWidth || document.body.offsetWidth)*0.9+"px";
+		
+		var bt=document.getElementById("bk2");
+		bt. style.fontSize=(document.documentElement.offsetWidth || document.body.offsetWidth)*0.1+"px";
+	  
+		var mar=0.0;
+		var mag=0.0;
+		var mab=0.0;
+		
+		var wr=0;
+		var wg=0;
+		var wb=0;
+		
+		var cs=1;
+		
+		var zt=0;
+		var hzt=0;
+		
+		var jsfps=1;
+		var js=0;
+		var jsfix=0;
+		var latejs=100;
+		var jsp=0;
+		var jsk=0;
+		latejs=new Date().getTime();
+		jsk=new Date().getTime();
+		
+		
+		//ingame 
+		
+		var hit=4;
+		var hst=0;
+		var ht=0;
+	
+	
+		
+		var myVar=setInterval(function(){myTimer()},10);
+function myTimer(){
+    var d=new Date();
+    var t=d.toLocaleTimeString();
+	
+	var csf=1;//colorfpsfix
+	
+	jsfps++;
+	js=d.getTime();
+	
+	jsp=js-jsk;
+	
+	if((js-jsfix)>1000)
+	{
+		jsfix=js;
+	document.getElementById("fps").innerHTML ="fps:"+jsfps;
+		jsfps=0;
+	}
+	
+	if(jsp>2500&&zt==0)
+		cs=0.1;
+	
+	//colorsj
+	  var bbd=document.getElementById("bd"); 
+      bbd.style.backgroundColor="rgb("+Math.ceil(mar)+","+Math.ceil(mag)+","+Math.ceil(mab)+")"; 
+	
+	
+     csf=cs*(js-latejs)/10;
+	latejs=js;
+	var same=true;
+	
+	if(mar<wr)
+		{mar=mar+csf;same=false;}
+	if(mar>(wr+2))
+		{mar=mar-csf;same=false;}
+	if(mag<wg)
+		{mag=mag+csf;same=false;}
+	if(mag>(wg+2))
+		{mag=mag-csf;same=false;}
+	if(mab<wb)
+		{mab=mab+csf;same=false;}
+	if(mab>(wb+2))
+		{mab=mab-csf;same=false;}
+	
+	if(same){
+		if(zt==0)
+			{
+	wr=Math.ceil(Math.random()*55+200);
+	wg=Math.ceil(Math.random()*55+200);
+	wb=Math.ceil(Math.random()*55+200);
+	}
+		if(zt==1)
+			{
+	wr=Math.ceil(Math.random()*255);
+	wg=Math.ceil(Math.random()*255);
+	wb=Math.ceil(Math.random()*255);
+				cs=1;
+	}
+		if(zt==2)
+			{
+	wr=Math.ceil(Math.random()*55+200);
+	wg=Math.ceil(Math.random()*55+200);
+	wb=Math.ceil(Math.random()*55+200);
+	}
+	}
+	//colorsjend
+	
+	//ingame
+	if(zt==1)
+	{
+	if(hit>=0&&ht==0)
+		{
+			
+		ht=js+Math.ceil(Math.random()*8000+2000);
+			
+		}
+	if(js>ht&&ht!=0&&zt==1)
+		{
+			cs=0;
+			//hst=js;
+		if(mar<122){mar=mar+100;}
+		if(mar>=122){mar=mar-100;}
+			if(mag<122){mag=mag+100;}
+		if(mag>=122){mag=mag-100;}
+			if(mab<122){mab=mab+100;}
+		if(mab>=122){mab=mab-100;}
+		}
+	   if(hit<0)
+	   {
+		   zt=2;
+		   document.getElementById("log").innerHTML ="完成！<br>平均反应延迟:"+Math.ceil(hst/5);
+		   document.getElementById("an").style.visibility='hidden';
+		document.getElementById("an").style="display:none;";
+		   document.getElementById("bk").style.visibility='visible';
+		document.getElementById("bk").style="display:block;";
+		   var bt=document.getElementById("bk");
+		bt. style.fontSize=(document.documentElement.offsetWidth || document.body.offsetWidth)*0.1+"px";
+		    
+		   
+		   
+		 var kls1=localStorage.getItem('kt');
+		 if(kls1!=666)
+			{
+				localStorage.setItem('length',0);
+				localStorage.setItem('kt',666);
+		  }
+		  var length=localStorage.getItem('length');
+		  
+		   localStorage.setItem('f'+length,hst);
+		    jsk2=new Date().getTime();
+		 // alert(jsk2);
+		   localStorage.setItem('t'+length,jsk2);
+		    length++;
+		   localStorage.setItem('length',length);
+		 /*  for(var i=0;i<length;i++)
+			   {
+				alert( localStorage.getItem('f'+i));  
+				   alert( localStorage.getItem('t'+i));  
+			   }
+		   */
+		 //  localStorage.setItem('length',ls1)
+		  //  localStorage.setItem('length',ls1);
+	   }
+	   }
+	
+	//finish
+	
+//document.body.addEventListener("MSPointerDown", ce, false);
+
+	
+}
+	//funcs	
+		function start()
+	{
+		zt=1;
+		cs=1;
+		document.getElementById("kt").style.visibility='hidden';
+		document.getElementById("kt").style="display:none;";
+		
+		document.getElementById("an").style.visibility='visible';
+		document.getElementById("an").style="display:block;";
+	}
+	
+		function end()
+	{
+		zt=0;
+		cs=0.1;
+		document.getElementById("kt").style.visibility='visible';
+		document.getElementById("kt").style="display:block;";
+		
+		document.getElementById("bk").style.visibility='hidden';
+		document.getElementById("bk").style="display:none;";
+		hst=0;
+		ht=0;
+		hit=4;
+	}
+	
+	function opendata()
+	{
+		zt=0;
+		cs=1;
+		document.getElementById("kt").style.visibility='hidden';
+		document.getElementById("kt").style="display:none;";
+		
+		document.getElementById("dt").style.visibility='visible';
+		document.getElementById("dt").style="display:block;";
+		
+		var ts=" ";
+		var length=localStorage.getItem('length');
+		for(var i=0;i<length;i++)
+			   {
+				
+				   
+				   
+				
+				   var tt=localStorage.getItem('t'+i);
+				   var unixTimestamp = new Date(tt*1) ;
+				   commonTime = unixTimestamp.toLocaleString();
+				  ts=ts+commonTime; ts=ts+"<br>";
+				   ts=ts+"反应速度（ms）："+localStorage.getItem('f'+i)/5;  
+				  
+				    ts=ts+"<br><br>";
+			document.getElementById("datatext").innerHTML =ts;	
+		
+	}
+	}
+	
+	function closedata()
+	{
+		zt=0;
+		cs=1;
+		document.getElementById("dt").style.visibility='hidden';
+		document.getElementById("dt").style="display:none;";
+		
+		document.getElementById("kt").style.visibility='visible';
+		document.getElementById("kt").style="display:block;";
+	}
+	
+		function c()
+	{
+		if(zt==1){
+			if((js-ht)>=0)
+				{
+					hst=hst+(js-ht-300);
+				document.getElementById("log").innerHTML ="剩余:"+hit+"<br>上一次操作速度延时："+(js-ht);
+			hit--;
+			}
+			if((js-ht)<0)
+				{
+					document.getElementById("log").innerHTML ="错误操作！+2秒";
+					hst=hst+2000;
+				}
+			ht=0;
+			cs=1;
+		}
+	}
+	
+ function RiQi(sj)
+   {
+       var now = new Date(sj*1000);
+       var   year=now.getFullYear();    
+         var   month=now.getMonth()+1;    
+         var   date=now.getDate();    
+         var   hour=now.getHours();    
+         var   minute=now.getMinutes();    
+         var   second=now.getSeconds();    
+         return   year+"-"+month+"-"+date+"   "+hour+":"+minute+":"+second;    
+        
+   }
+		</script>
+	
+	
+</body>
+</html>
