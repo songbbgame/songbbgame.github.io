@@ -55,7 +55,7 @@
 	<p id="data" OnClick="opendata()">查看日志</p>
 		
 	
-	</center></div>
+	</center></div> 
 	
 	
 	
@@ -74,9 +74,9 @@
 	<p id="bk" OnClick="end()">返回</p>
 	
 	
-<footer style="bottom:0;color: rgba(51,78,59,0.48);">songbbgame-songbb<br> 建议前往TapTap平台下载。</footer>
+<footer style="bottom:0;color: rgba(51,78,59,0.48);">songbbgame-songbb<br> 下载后方便打开，不到1mb，存档永久保留！<br>官方qq群：788355784</footer>
 	
-<script>    
+<script>      
 //localStorage.clear(); 
 	window.onunload = function () { };
 	document.getElementById("an").style.visibility='hidden';
@@ -241,7 +241,7 @@ function myTimer(){
 	   if(hit<0)
 	   {
 		   zt=2;
-		   document.getElementById("log").innerHTML ="完成！<br>平均反应延迟:"+Math.ceil(hst/5);
+		   document.getElementById("log").innerHTML ="完成！<br>平均反应延迟:"+(Math.ceil(hst/5));
 		   document.getElementById("an").style.visibility='hidden';
 		document.getElementById("an").style="display:none;";
 		   document.getElementById("bk").style.visibility='visible';
@@ -259,7 +259,7 @@ function myTimer(){
 		  }
 		  var length=localStorage.getItem('length');
 		  
-		   localStorage.setItem('f'+length,hst);
+		   localStorage.setItem('f'+length,(Math.ceil(hst/5)));
 		    jsk2=new Date().getTime();
 		 // alert(jsk2);
 		   localStorage.setItem('t'+length,jsk2);
@@ -330,7 +330,7 @@ function myTimer(){
 				   var unixTimestamp = new Date(tt*1) ;
 				   commonTime = unixTimestamp.toLocaleString();
 				  ts=ts+commonTime; ts=ts+"<br>";
-				   ts=ts+"反应速度（ms）："+localStorage.getItem('f'+i)/5;  
+				   ts=ts+"反应速度（ms）："+localStorage.getItem('f'+i);  
 				  
 				    ts=ts+"<br><br>";
 			document.getElementById("datatext").innerHTML =ts;	
@@ -355,7 +355,7 @@ function myTimer(){
 			if((js-ht)>=0)
 				{
 					hst=hst+(js-ht-300);
-				document.getElementById("log").innerHTML ="剩余:"+hit+"<br>上一次操作速度延时："+(js-ht);
+				document.getElementById("log").innerHTML ="剩余:"+hit+"<br>上一次操作速度延时："+(js-ht-300);
 			hit--;
 			}
 			if((js-ht)<0)
