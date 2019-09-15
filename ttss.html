@@ -74,7 +74,7 @@
 	<p id="bk" OnClick="end()">返回</p>
 	
 	
-<footer style="bottom:0;color: rgba(51,78,59,0.48);">songbbgame-songbb<br> 下载后方便打开，不到1mb，存档永久保留！<br>官方qq群：788355784</footer>
+<footer id="foot" style="bottom:0;color: rgba(51,78,59,0.48);">songbbgame-songbb<br> 下载后方便打开，不到1mb，存档永久保留！<br>官方qq群：788355784</footer>
 	
 <script>      
 //localStorage.clear(); 
@@ -91,7 +91,7 @@
 	
 	
 		var bt=document.getElementById("bt");
-		bt. style.fontSize=(document.documentElement.offsetWidth || document.body.offsetWidth)*0.2+"px";
+		bt. style.fontSize=(document.documentElement.offsetWidth || document.body.offsetWidth)*0.15+"px";
 		 
 		var bt=document.getElementById("fps");
 		bt. style.fontSize=(document.documentElement.offsetWidth || document.body.offsetWidth)*0.05+"px";
@@ -119,6 +119,9 @@
 		
 		var bt=document.getElementById("bk2");
 		bt. style.fontSize=(document.documentElement.offsetWidth || document.body.offsetWidth)*0.1+"px";
+	
+	var bt=document.getElementById("foot");
+		bt. style.fontSize=(document.documentElement.offsetWidth || document.body.offsetWidth)*0.03+"px";
 	  
 		var mar=0.0;
 		var mag=0.0;
