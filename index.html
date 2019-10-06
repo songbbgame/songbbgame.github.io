@@ -1,29 +1,52 @@
+<!doctype html>
 <html>
-<meta name="referrer" content="no-referrer" http-equiv="Content-Type" content="text/html; charset=utf-8">
-     
-<body >
-    <div class="wrapper">
-          <div id="web_bg" style="background-image: url(https://i.loli.net/2019/10/04/pdcGLeE5WxrfhCB.jpg);
-                                  position:fixed;
-  top: 0;
-  left: 0;
-  width:100%;
-  height:100%;
-  min-width: 500px;
-  z-index:-10;
-  zoom: 1;
-  background-color: #fff;
-  background-repeat: no-repeat;
-  background-size: cover;
-  -webkit-background-size: cover;
-  -o-background-size: cover;
-  background-position: center 0;
-                                  "></div>  
-            
-          <h1>_______[正在载入...  超过15秒无反应请刷新]______
-            
-</div>      
+<head>
+<meta charset="utf-8">
+<title>index.html</title>
+	<style>
+		#web_bg
+		{
+			background-image: url(https://i.loli.net/2019/10/06/uM3PKnOSy7gXLVm.jpg
+);                     position:fixed;
+			top: 0;
+			left: 0;
+			width:100%;
+			height:100%;
+			min-width: 480px;
+			z-index:-10;
+			zoom: 1;
+			background-color: #fff;
+			background-repeat: no-repeat;
+			background-size: cover;
+			-webkit-background-size: cover;
+			-o-background-size: cover;
+			background-position: center center;
+			
+		}
+	</style>
+</head>
+
+<body>
+	<div class="wrapper">
+          <div id="web_bg" ></div>  
+          <p style="color:azure" id="jsshow">js</p>
+          <h1>_______[正在载入...  超过15秒无反应请刷新]______</h1>
+	</div>
 </body>
+	
+	<script>
+		
+	var myVar=setInterval(function(){myTimer()},20);
+
+var js=1;
+var ds=5;
+function myTimer(){
+    var d=new Date();
+    var t=d.toLocaleTimeString();
+
+js=js+1;
+	
+ document.getElementById("jsshow").innerHTML =js;
+}
+	</script>
 </html>
-
-
