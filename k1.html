@@ -1,0 +1,52 @@
+<!doctype html>
+<html><head>
+<meta charset="utf-8">
+<title>Songbbtest</title>
+
+<style>
+
+
+
+canvas {
+    position: absolute;
+    width: 100%;
+    z-index: -1;
+    margin: 0 auto;
+
+}
+
+body {
+	
+    position: absolute;
+    width:100%;
+    height: 100%;
+    content-zooming: none;
+	margin: 0px;
+	padding: :0px;
+}
+
+
+
+html {
+	height:100%;
+}
+
+</style>
+
+</head>
+
+<body>
+	
+<canvas  id="c1" width="1024" height="2048" style="background: #FFFFFF"> </canvas>
+
+<script>var c=document.getElementById("c1");var ww=c.width;var hh=c.height;var c2=c.getContext("2d");c2.shadowBlur=50;c2.shadowColor='rgba(0,0,0,1.00)';for(i=12;i>=0;i=i-1){for(i2=5;i2>=0;i2=i2-1){c2.shadowColor='rgba(0,0,0,0.6)';c2.shadowBlur=75;var sb=Math.random();sb=Math.ceil(sb*2000)%55+115;var g1=c2.createRadialGradient(256*i2,300*i+150*(i2%2),161,256*i2,300*i+150*(i2%2),211);g1.addColorStop(0,'rgba('+35+','+85+','+sb+',1)');g1.addColorStop(1,'rgba('+25+','+35+','+(sb-22)+',1)');c2.fillStyle=g1;c2.beginPath();c2.arc(256*i2,300*i+150*(i2%2),195,0,6.3,true);c2.closePath();c2.fill()}}</script>
+	
+</body>
+	
+</html>
+
+
+
+
+
+
