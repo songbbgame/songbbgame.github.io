@@ -23,7 +23,13 @@ body {
     content-zooming: none;
 	margin: 0px;
 	padding: :0px;
+	filter: blur(0vw);
+	opacity: 1;
 	
+	animation:a1 2s;
+-moz-animation:a1 2s;
+-webkit-animation:a1 2s; 
+-o-animation:a1 2s; 
 }
 
 html {
@@ -43,42 +49,38 @@ html {
 		1vw 1vw 3vw 0.1vw rgba(139,210,255,0.63) inset,
 		0 0 3vw 1vw rgba(189,255,234,0.23);
 		
-animation:myfirst 2s;
--moz-animation:myfirst 2s; /* Firefox */
--webkit-animation:myfirst 2s; /* Safari and Chrome */
--o-animation:myfirst 2s; /* Opera */
+
 	}
 	
-	@keyframes myfirst
+	@keyframes a1
 {
-0%   {color: rgba(248,255,252,0.00);text-shadow:0 0 0vw #rgba(0,0,0,0);}
+0%  {filter: blur(2vw);opacity:0;}
+50%  {filter: blur(0.3vw);opacity: 1;}
+100%  {filter: blur(0vw);}
+}
+
+@-moz-keyframes a1
+{
+0%   {color: rgba(248,255,252,0.00);}
 25%  {color: rgba(255,255,255,1.00);text-shadow:0 0 0vw #rgba(0,0,0,0);}
 50%  {color: rgba(255,255,255,1.00);text-shadow:0 0 5vw #FFF;}
 100% {color: rgba(248,255,252,1.00);text-shadow:0 0 0vw #rgba(0,0,0,0);}
 }
 
-@-moz-keyframes myfirst /* Firefox */
+@-webkit-keyframes a1
 {
-0%   {background:red;}
-25%  {background:yellow;}
-50%  {background:blue;}
-100% {background:green;}
+0%   {color: rgba(248,255,252,0.00);}
+25%  {color: rgba(255,255,255,1.00);text-shadow:0 0 0vw #rgba(0,0,0,0);}
+50%  {color: rgba(255,255,255,1.00);text-shadow:0 0 5vw #FFF;}
+100% {color: rgba(248,255,252,1.00);text-shadow:0 0 0vw #rgba(0,0,0,0);}
 }
 
-@-webkit-keyframes myfirst /* Safari and Chrome */
+@-o-keyframes a1
 {
-0%   {background:red;}
-25%  {background:yellow;}
-50%  {background:blue;}
-100% {background:green;}
-}
-
-@-o-keyframes myfirst /* Opera */
-{
-0%   {background:red;}
-25%  {background:yellow;}
-50%  {background:blue;}
-100% {background:green;}
+0%   {color: rgba(248,255,252,0.00);}
+25%  {color: rgba(255,255,255,1.00);text-shadow:0 0 0vw #rgba(0,0,0,0);}
+50%  {color: rgba(255,255,255,1.00);text-shadow:0 0 5vw #FFF;}
+100% {color: rgba(248,255,252,1.00);text-shadow:0 0 0vw #rgba(0,0,0,0);}
 }
 	
 	.d1 {
