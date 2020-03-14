@@ -12,10 +12,10 @@ canvas {
     width: 100%;
     z-index: -1;
     margin: 0 auto;
-	animation:ac 4s;
--moz-animation:ac 4s;
--webkit-animation:ac 4s; 
--o-animation:ac 3s; 
+	animation:ac 9s;
+-moz-animation:ac 9s;
+-webkit-animation:ac 9s; 
+-o-animation:ac 9s; 
 	filter: blur(1vw);
 }
 
@@ -55,10 +55,154 @@ html {
 		
 		display:inline-block;
 		
-		animation:at 4s;
--moz-animation:at 4s;
--webkit-animation:at 4s; 
--o-animation:at 4s; 
+		animation:at 9s;
+-moz-animation:at 9s;
+-webkit-animation:at 9s; 
+-o-animation:at 9s; 
+
+		transform-style: preserve-3d;
+	}
+	
+
+	@keyframes ac
+{
+50%  {filter: blur(0vw);opacity:1;}
+100%  {filter: blur(1vw);opacity: 1;}
+}
+	@keyframes at
+{
+	0%  {
+		
+	
+		transform:rotate3d(0.1,1,0.1,80deg) translate3d(-27vw,-90vw,10vw);
+		box-shadow:  0 0 0 0；
+	}
+	50%  {transform:rotate3d(0,0,0,0) translate3d(0,0,0);
+		box-shadow: -1vw -1vw 3vw 0.1vw rgba(139,255,161,0.00) inset,
+		1vw 1vw 3vw 0.1vw rgba(139,210,255,0.00) inset,
+		0 0 3vw 1vw rgba(194,240,229,0.00);}
+100%  {
+	
+	box-shadow: -1vw -1vw 3vw 0.1vw rgba(139,255,161,0.63) inset,
+		1vw 1vw 3vw 0.1vw rgba(139,210,255,0.63) inset,
+		0 0 3vw 1vw rgba(194,240,229,0.23);
+	}
+}
+	
+@-moz-keyframes a1
+{
+0%   {color: rgba(248,255,252,0.00);}
+25%  {color: rgba(255,255,255,1.00);text-shadow:0 0 0vw #rgba(0,0,0,0);}
+50%  {color: rgba(255,255,255,1.00);text-shadow:0 0 5vw #FFF;}
+100% {color: rgba(248,255,252,1.00);text-shadow:0 0 0vw #rgba(0,0,0,0);}
+}
+
+@-webkit-keyframes a1
+{
+0%   {color: rgba(248,255,252,0.00);}
+25%  {color: rgba(255,255,255,1.00);text-shadow:0 0 0vw #rgba(0,0,0,0);}
+50%  {color: rgba(255,255,255,1.00);text-shadow:0 0 5vw #FFF;}
+100% {color: rgba(248,255,252,1.00);text-shadow:0 0 0vw #rgba(0,0,0,0);}
+}
+
+@-o-keyframes a1
+{
+0%   {color: rgba(248,255,252,0.00);}
+25%  {color: rgba(255,255,255,1.00);text-shadow:0 0 0vw #rgba(0,0,0,0);}
+50%  {color: rgba(255,255,255,1.00);text-shadow:0 0 5vw #FFF;}
+100% {color: rgba(248,255,252,1.00);text-shadow:0 0 0vw #rgba(0,0,0,0);}
+}
+	
+</style>
+
+</head>
+
+<body>
+	<canvas  id="c1" width="1024" height="2048"> </canvas>
+	<script>var c=document.getElementById("c1");var ww=c.width;var hh=c.height;var c2=c.getContext("2d");c2.shadowBlur=50;c2.shadowColor='rgba(0,0,0,1.00)';for(i=12;i>=0;i=i-1){for(i2=5;i2>=0;i2=i2-1){c2.shadowColor='rgba(0,0,0,0.6)';c2.shadowBlur=75;var sb=Math.random();sb=Math.ceil(sb*2000)%55+115;var g1=c2.createRadialGradient(256*i2,300*i+150*(i2%2),161,256*i2,300*i+150*(i2%2),211);g1.addColorStop(0,'rgba('+35+','+85+','+sb+',1)');g1.addColorStop(1,'rgba('+25+','+35+','+(sb-22)+',1)');c2.fillStyle=g1;c2.beginPath();c2.arc(256*i2,300*i+150*(i2%2),195,0,6.3,true);c2.closePath();c2.fill()}}
+	
+	</script>
+	
+	<center><br><br><br>
+	<div style="font-size:10vw;">林鱼创意</div><br><br><br><br>
+	<div style="width: 30%;border-color: rgba(255,0,217,0.75);">★新xx上线</div>&nbsp&nbsp&nbsp&nbsp&nbsp<div style="width: 30%">选项2</div><br><br>
+		<div style="width: 30%">选项3</div>&nbsp&nbsp&nbsp&nbsp&nbsp<div style="width: 30%;border-color: rgba(249,255,132,1.00);">☞领取福利</div><br><br>
+		<div style="width: 18%;">嘻嘻嘻</div>&nbsp&nbsp&nbsp<div style="width: 18%">选项6</div>&nbsp&nbsp&nbsp<div style="width: 18%">选项6</div>
+	
+	</center>
+
+
+	
+</body>
+	
+</html>
+
+
+
+
+
+
+<!doctype html>
+<html><head>
+<meta charset="utf-8">
+<title>Songbbtest</title>
+
+<style>
+
+
+
+canvas {
+    position: absolute;
+    width: 100%;
+    z-index: -1;
+    margin: 0 auto;
+	animation:ac 9s;
+-moz-animation:ac 9s;
+-webkit-animation:ac 9s; 
+-o-animation:ac 9s; 
+	filter: blur(1vw);
+}
+
+body {
+	
+    position: absolute;
+    width:100%;
+    height: 100%;
+    content-zooming: none;
+	margin: 0px;
+	padding: :0px;
+	filter: blur(0vw);
+
+	
+	perspective: 25vw;
+	
+}
+
+html {
+	height:100%;
+}
+
+	div {
+		
+		text-align: center;
+		color: rgba(251,253,252,1.00);
+		width:60%;
+		padding: 3% 3%;
+		font-size:5vw;
+		text-shadow: 0 0 1vw #000;
+		border-radius: 7%;
+		
+		box-shadow: -1vw -1vw 3vw 0.1vw rgba(139,255,161,0.63) inset,
+		1vw 1vw 3vw 0.1vw rgba(139,210,255,0.63) inset,
+		0 0 3vw 1vw rgba(194,240,229,0.23);
+		background: rgba(63,87,94,0.25);
+		
+		display:inline-block;
+		
+		animation:at 9s;
+-moz-animation:at 9s;
+-webkit-animation:at 9s; 
+-o-animation:at 9s; 
 
 		transform-style: preserve-3d;
 	}
