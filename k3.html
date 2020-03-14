@@ -52,13 +52,16 @@ html {
 		background: rgba(63,87,94,0.25);
 		
 		display:inline-block;
-		
+		box-shadow: -1vw -1vw 3vw 0.1vw rgba(139,255,161,0.63) inset,
+		1vw 1vw 3vw 0.1vw rgba(139,210,255,0.63) inset,
+		0 0 3vw 1vw rgba(194,240,229,0.23);
 		animation:at 9s;
 -moz-animation:at 9s;
 -webkit-animation:at 9s; 
 -o-animation:at 9s; 
 
 		transform-style: preserve-3d;
+		
 	}
 	
 
@@ -72,20 +75,26 @@ html {
 	0%  {
 		
 	
-		transform:rotate3d(0.1,1,0.1,80deg) translate3d(-27vw,-90vw,10vw);
+		transform:rotate3d(0.1,1,0.1,5deg) translate3d(-2vw,-9vw,1vw);
+		opacity: 0;
 		box-shadow: 0 0 0 0 rgba(139,255,161,0.00) inset,
 		0 0 0 0 rgba(139,210,255,0.00) inset,
 		0 0 0 0 rgba(194,240,229,0.00);
+		text-shadow:0 0 0vw #rgba(0,0,0,0);
 	}
 	50%  {transform:rotate3d(0,0,0,0) translate3d(0,0,0);
+		opacity: 1;
 		box-shadow: -1vw -1vw 3vw 0.1vw rgba(139,255,161,0.00) inset,
 		1vw 1vw 3vw 0.1vw rgba(139,210,255,0.00) inset,
-		0 0 3vw 1vw rgba(194,240,229,0.00);}
+		0 0 3vw 1vw rgba(194,240,229,0.00);
+	text-shadow:0 0 5vw #FFF;
+	}
 100%  {
 	
 	box-shadow: -1vw -1vw 3vw 0.1vw rgba(139,255,161,0.63) inset,
 		1vw 1vw 3vw 0.1vw rgba(139,210,255,0.63) inset,
 		0 0 3vw 1vw rgba(194,240,229,0.23);
+	text-shadow:0 0 0vw #rgba(0,0,0,0);
 	}
 }
 	
