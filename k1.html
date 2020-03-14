@@ -23,23 +23,90 @@ body {
     content-zooming: none;
 	margin: 0px;
 	padding: :0px;
+	
 }
-
-
 
 html {
 	height:100%;
 }
 
+	div {
+		background-color:rgba(202,225,224,1.00) ;
+		text-align: center;
+		color: rgba(248,255,252,1.00);
+		width:50%;
+		padding: 3% 3%;
+		font-size:10vw;
+		border-radius: 7%;
+		background: rgba(0,0,0,0.25);
+		box-shadow: -1vw -1vw 3vw 0.1vw rgba(139,255,161,0.63) inset,
+		1vw 1vw 3vw 0.1vw rgba(139,210,255,0.63) inset,
+		0 0 3vw 1vw rgba(189,255,234,0.23);
+		
+animation:myfirst 2s;
+-moz-animation:myfirst 2s; /* Firefox */
+-webkit-animation:myfirst 2s; /* Safari and Chrome */
+-o-animation:myfirst 2s; /* Opera */
+	}
+	
+	@keyframes myfirst
+{
+0%   {color: rgba(248,255,252,0.00);text-shadow:0 0 0vw #rgba(0,0,0,0);}
+25%  {color: rgba(255,255,255,1.00);text-shadow:0 0 0vw #rgba(0,0,0,0);}
+50%  {color: rgba(255,255,255,1.00);text-shadow:0 0 5vw #FFF;}
+100% {color: rgba(248,255,252,1.00);text-shadow:0 0 0vw #rgba(0,0,0,0);}
+}
+
+@-moz-keyframes myfirst /* Firefox */
+{
+0%   {background:red;}
+25%  {background:yellow;}
+50%  {background:blue;}
+100% {background:green;}
+}
+
+@-webkit-keyframes myfirst /* Safari and Chrome */
+{
+0%   {background:red;}
+25%  {background:yellow;}
+50%  {background:blue;}
+100% {background:green;}
+}
+
+@-o-keyframes myfirst /* Opera */
+{
+0%   {background:red;}
+25%  {background:yellow;}
+50%  {background:blue;}
+100% {background:green;}
+}
+	
+	.d1 {
+		width: 100%;
+		padding: 5% 22.5%;
+		box-shadow:0 0;
+		background: rgba(255,255,255,0.00);
+	}
 </style>
 
 </head>
 
 <body>
+	<canvas  id="c1" width="1024" height="2048"> </canvas>
+	<script>var c=document.getElementById("c1");var ww=c.width;var hh=c.height;var c2=c.getContext("2d");c2.shadowBlur=50;c2.shadowColor='rgba(0,0,0,1.00)';for(i=12;i>=0;i=i-1){for(i2=5;i2>=0;i2=i2-1){c2.shadowColor='rgba(0,0,0,0.6)';c2.shadowBlur=75;var sb=Math.random();sb=Math.ceil(sb*2000)%55+115;var g1=c2.createRadialGradient(256*i2,300*i+150*(i2%2),161,256*i2,300*i+150*(i2%2),211);g1.addColorStop(0,'rgba('+35+','+85+','+sb+',1)');g1.addColorStop(1,'rgba('+25+','+35+','+(sb-22)+',1)');c2.fillStyle=g1;c2.beginPath();c2.arc(256*i2,300*i+150*(i2%2),195,0,6.3,true);c2.closePath();c2.fill()}}
 	
-<canvas  id="c1" width="1024" height="2048" style="background: #FFFFFF"> </canvas>
+	</script>
+	
+	
+	<div class="d1"><div>林鱼创意</div></div>
+	<div class="d1"><div>林鱼创意</div></div>
+	<div class="d1"><div>林鱼创意</div></div>
+	<div class="d1"><div>林鱼创意</div></div>
+	<div class="d1"><div>林鱼创意</div></div>
+	<div class="d1"><div>林鱼创意</div></div>
+	
 
-<script>var c=document.getElementById("c1");var ww=c.width;var hh=c.height;var c2=c.getContext("2d");c2.shadowBlur=50;c2.shadowColor='rgba(0,0,0,1.00)';for(i=12;i>=0;i=i-1){for(i2=5;i2>=0;i2=i2-1){c2.shadowColor='rgba(0,0,0,0.6)';c2.shadowBlur=75;var sb=Math.random();sb=Math.ceil(sb*2000)%55+115;var g1=c2.createRadialGradient(256*i2,300*i+150*(i2%2),161,256*i2,300*i+150*(i2%2),211);g1.addColorStop(0,'rgba('+35+','+85+','+sb+',1)');g1.addColorStop(1,'rgba('+25+','+35+','+(sb-22)+',1)');c2.fillStyle=g1;c2.beginPath();c2.arc(256*i2,300*i+150*(i2%2),195,0,6.3,true);c2.closePath();c2.fill()}}</script>
+
 	
 </body>
 	
