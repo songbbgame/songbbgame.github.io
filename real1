@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>real</title>
+	<style>
+		body {
+background-color: rgba(125,133,145,1.00);
+}
+
+html {
+	height:100%;
+}
+
+	div {
+		
+		text-align: center;
+		color: rgba(251,253,252,1.00);
+		width:50vw;
+		
+		padding: 4% 9% 9% 9%;
+		font-size:10vw;
+		
+		 color: #E2E2E2;
+   
+    text-shadow: 
+      -1px -1px 1.5px #FFFFFF, 
+      0px 1px 0 #8a8a8a, 
+      0px 1.5px 0 #838383, 
+      0px 2px 0 #7E7E7E, 
+      0px 2.5px 0 #7d7d7d, 
+      0px 3px 0 #7B7B7B, 
+      0px 3.5px 0 #777, 
+     
+      0.1vw 0.5vw 0.5vw rgba(0, 0, 0, 0.35),
+      0.2vw 0.6vw 0.5vw rgba(0, 0, 0, 0.05),
+      0.4vw 0.8vw 0.8vw rgba(0, 0, 0, 0.07),
+      0.4vw 0.9vw 3.5vw rgba(0, 0, 0, 0.25);
+		
+		
+		
+		border-radius: 12%;
+		 
+		background: rgba(164,176,192,1.00);
+		
+		
+		box-shadow: 
+			0 0 3vw 1vw rgba(0,0,0,0.04),/*周围环境光遮蔽*/
+			0.5vw 0.5vw 1vw 0vw rgba(0,0,0,0.02),/*右下最贴近环境光遮蔽加深*/
+			4vw 4vw 4vw 0vw rgba(0,0,0,0.0),/*右下次贴近环境光遮蔽加深*/
+			-4vw -4vw 2vw 0vw rgba(0,0,0,0.16) inset,/*物体右下环境光遮蔽*/
+			-1vw -1vw 2vw 0vw rgba(0,0,0,0.2) inset,/*物体右下最接近环境光遮蔽*/
+			0.5vw 0.5vw 2vw 0vw rgba(0,0,0,0.10) inset,/*物体左上最接近环境光遮蔽*/
+			4vw 4.5vw 2vw 0vw rgba(255,255,255,0.2) inset,/*物体高光*/
+			1vw 1vw 2vw 0vw rgba(255,255,255,0.10) inset,/*物体高光细*/
+			3vw 3vw 2vw 0vw rgba(255,255,255,0.10) inset,/*物体高光中*/
+			6vw 8vw 3vw 0vw rgba(0,0,0,0.05),/*最远阴影1*/
+			5vw 6vw 2vw 0vw rgba(0,0,0,0.03),/*最远阴影2*/
+			4vw 5vw 2vw 0vw rgba(0,0,0,0.03),/*最远阴影3*/
+			3vw 4vw 2vw 0vw rgba(0,0,0,0.03),/*最远阴影4*/
+			2vw 2vw 1vw 0vw rgba(0,0,0,0.03),/*最远阴影5*/
+			1vw 1vw 1vw 1vw rgba(0,0,0,0.01);/*最远阴影6*/
+		
+		
+	}
+		
+	</style>
+</head>
+
+<body>
+	<center>
+		
+		<br><br><br><br>
+		
+		
+		<div style="width:50vw;height:50vw;background-image: url(https://s1.ax1x.com/2020/06/06/t6kvAe.jpg); background-size: cover; "></div><br><br><br>
+		<div style="background: rgba(150,250,200,0.4);">标题标题</div><br><br><br>
+		<div style="background: rgba(150,200,250,0.4);">次主题色</div><br><br><br>
+		<div style="background: rgba(150,200,250,0.4);font-size:5vw;width:75vw;">文字：海洋（SEA），地理名词，是地球上最广阔的水体的总称。地球表面被各大陆地分隔为彼此相通的广大水域称为海洋，海洋的中心部分称作洋，边缘部分称作海，彼此沟通组成统一的水体。 [1-2]  
+地球上海洋总面积约为3.6亿平方公里，约占地球表面积的71%，平均水深约3795米。海洋中含有十三亿五千多万立方千米的水，约占地球上总水量的97%，而可用于人类饮用只占2%。
+地球四个主要的大洋为太平洋、大西洋、印度洋、北冰洋，大部分以陆地和海底地形线为界。目前为止，人类已探索的海底只有5%，还有95%大海的海底是未知的。</div><br><br><br>
+		<div style="background: rgba(126,136,151,1.00);">失效的</div><br><br><br>
+		
+	</center>
+</body>
+</html>
