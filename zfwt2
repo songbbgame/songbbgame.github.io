@@ -1,0 +1,279 @@
+<html><head>
+<meta charset="utf-8">
+<title>字符位图-纱妮卡</title>
+
+<style>
+.button {
+	 width:9%;
+	background-color: rgba(222,222,222,0.70);
+	color:black;
+		
+	font-size: 100px;
+	text-align: center;
+}
+	.button2 {
+	 width:55%;
+	background-color: rgba(222,222,222,0.70);
+	color:black;
+		
+	font-size: 100px;
+	text-align: center;
+}
+	h1
+	{
+	text-shadow: 0 3px 3px #ccc;	
+	}
+
+</style>
+
+</head>
+
+<body>
+<center>
+		<br>
+	<h1>字符位图-Songbb<br>按下按钮来改变颜色,之后选中所有按钮,(若无法选中,则尝试先选中这段文字再一同选中按钮),复制,再粘贴在[fix]按钮上面的输入框中,点击fix,接着复制按钮下方文本.完成.可在qq 微信发送字符位图啦!!!</h1>
+	
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<br>n
+	
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<br>n
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<br>n
+<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<br>n
+<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<br>n
+<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<br>n
+<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<br>n
+<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<br>n
+<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<br>n
+<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<br>n
+<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<br>n
+<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<br>n
+<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<br>n
+<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<br>n
+<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<br>n
+<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<br>n
+<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<br>n
+<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<br>n
+<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<br>n
+<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<button class="button" onclick="if(this.innerHTML != '1'){this.innerHTML = '1';}else{this.innerHTML = '0';}">0</button>
+	<br>n
+
+
+		<br><br><br>	<br><br><br>
+		<input id="i" style="width:95%" type="text" value=" ">
+	<br><br><br>
+	<button class="button2" onclick="usenum()" type="button">fix</button>
+	<br><br><br><br><br><br>
+		<h4 id="r">jieguo</h4>
+	</center><script>
+	function usenum()
+{
+	var aa = document.getElementById("i").value.split(" ").join("");
+	aa =aa.split("n").join("<br>");
+document.getElementById("r").innerHTML=aa;
+	
+}
+		</script>
+	
+	
+
+
+
+</body></html>
