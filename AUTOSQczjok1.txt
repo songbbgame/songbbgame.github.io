@@ -1,0 +1,457 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.Networking;
+using System;
+using System.Text.RegularExpressions;
+
+//using NPOI.XWPF.UserModel;
+
+using System.IO;
+//using NPOI.OpenXmlFormats.Wordprocessing;
+using System.Diagnostics;
+using System.Threading;
+
+using UnityEngine.SceneManagement;
+using System.Text;
+
+public class czjok1 : MonoBehaviour
+{
+    public InputField word;
+    public Text re;
+    public Text wordlsjs;
+
+    public string[] words;
+    public string[] fys;
+    public string[] ljs;
+
+    public string[] ljsnoword;
+    public string[] ljsluan;
+    public int[] ljsluana;
+
+
+    public TextAsset yfck;
+    public int yfjs = 1;
+    public string  yfjsa;
+
+
+    public int getok;
+    public int getokf;
+
+    public string wordsluanall;
+    public string ljsluanall;
+    public string fysall;
+    public string asall;
+
+    //private const string filePath = @"D:\AUTOSQ";
+    /// 文件名
+    //public string fileName = "test1.docx";
+    public string pathaaa;
+
+    private StreamWriter sw;
+    /// word文档
+    //public  XWPFDocument testdoc = new XWPFDocument();
+
+    public Text snote;
+    public Image mainb;
+
+    public CanvasGroup c1;
+    public Text note2;
+    public CanvasGroup c2;
+
+    public int zt = 0;
+
+
+
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        if (!Directory.Exists(@"D:\AUTOSQ"))
+        {
+            Directory.CreateDirectory(@"D:\AUTOSQ");
+        }
+    }
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        if(zt==1)
+        {
+            if (c1.alpha > 0)
+                c1.alpha = c1.alpha - 0.05f;
+            else
+                c1.gameObject.SetActive(false);
+            if (c2.alpha <1)
+                c2.alpha = c2.alpha + 0.05f;
+            c2.gameObject.SetActive(true);
+        }
+        if (zt == -1)
+        {
+            if (c2.alpha > 0)
+                c2.alpha = c2.alpha - 0.05f;
+            else
+                SceneManager.LoadScene("czj");
+            
+        }
+        if (zt==0)
+        {
+            if (c1.alpha <1)
+                c1.alpha = c1.alpha + 0.05f;
+        }
+
+
+
+
+        int lsjs = word.text.Split(' ').Length;
+        if (word.text.Length > 1)
+        {
+            if (word.text.Substring(word.text.Length - 1, 1) == " ")
+                lsjs--;
+            if(lsjs<10)
+            wordlsjs.text = "已输入:" + (lsjs).ToString() + "个单词 （请输入十个单词）";
+            if (lsjs == 10)
+            {
+                wordlsjs.text = "已输入10个单词！";
+                mainb.color = new Color(0.5f, 0.8f, 0.5f);
+            }
+            else
+            {
+                mainb.color = new Color(0.5f, 0.5f, 0.5f);
+            }
+            if (lsjs> 10)
+                wordlsjs.text = "已输入:" + (lsjs).ToString() + "个单词! 仅支持输入十个单词";
+
+
+        }
+        else
+            wordlsjs.text = "请输入10个单词";
+
+        if (getok >= 10)
+        {
+            scczj2();
+            getok = 0;
+        }
+        else
+        {
+            if (getok > getokf)
+            {
+                StartCoroutine(Getfylj(words[getok], getok));
+                getokf++;
+            }
+        }
+
+        if (word.text.Length > 2)
+        {
+            if (word.text.Substring(0, 1) == " ")
+                word.text = word.text.TrimStart(' ');
+        }
+
+        word.text = word.text.Replace("  ", " ");
+        word.text = word.text.Replace("   ", " ");
+
+        
+
+    }
+
+
+    public void scczj()
+    {
+
+        int lsjs = word.text.Split(' ').Length;
+        if (word.text.Length > 1)
+        {
+            if (word.text.Substring(word.text.Length - 1, 1) == " ")
+                lsjs--;
+            if(lsjs==10)
+            {
+
+                zt = 1;
+
+                if (word.text.Substring(word.text.Length - 1, 1) == " ")
+                    word.text = word.text.TrimEnd(' ');
+
+                words = word.text.Split(' ');
+                for (int i = 0; i < words.Length; i++)
+                {
+                    words[i] = words[i].Replace(" ", "");
+                }
+                StartCoroutine(Getfylj(words[getok], getok));
+
+
+
+            }
+        }
+
+        
+    }
+    public void scczj2()
+    {
+        
+        for (int i = 0; i < words.Length; i++)
+        {
+            ljsnoword[i] = ljs[i].Replace(words[i], "__________");
+            ljsnoword[i+10] = ljs[i].Replace(words[i], "__________");
+        }
+        
+        //ljsluan = ljsnoword;
+        
+        Invoke("luanljs", 0.2f);
+        Invoke("kouyf", 0.4f);
+        Invoke("mixsth1", 0.6f);
+        Invoke("czjword", 0.8f);
+    }
+
+        public void dbs()
+    {
+        UnityEngine.Debug.Log("words[1]"+words[1]);
+        UnityEngine.Debug.Log("ljs[1]" + ljs[1]);
+    }
+
+ 
+    IEnumerator Getfylj(string ow, int wid)
+    {
+        UnityWebRequest webRequest = UnityWebRequest.Get("http://dict.cn/" + ow);
+        yield return webRequest.SendWebRequest();
+
+        if (webRequest.isHttpError || webRequest.isNetworkError)
+        {
+            UnityEngine.Debug.Log(webRequest.error);
+            snote.color = new Color(1,0,0);
+            snote.text = "抱歉，无法找到:"+ow;
+            getok++;
+        }
+            
+        else
+        {
+            string ret = webRequest.downloadHandler.text;
+            string bfr = webRequest.downloadHandler.text;
+            Regex myReg0 = new Regex("dict-basic-ul");
+            ret = myReg0.Replace(ret, ">midshang<");
+            Regex myReg02 = new Regex("padding-top: 25px;");
+            ret = myReg02.Replace(ret, ">midxia<");
+            Regex myReg = new Regex("<.*?>");
+            ret = myReg.Replace(ret, "");
+            Regex myReg2 = new Regex("\t|\n");
+            ret = myReg2.Replace(ret, "");
+            ret = "kkkt " + ret + " eeend";
+            Regex myReg3 = new Regex("kkkt.*?midshang");
+            ret = myReg3.Replace(ret, "");
+            Regex myReg4 = new Regex("midxia.*?eeend");
+            ret = myReg4.Replace(ret, "");
+            //string ft = ret;
+            UnityEngine.Debug.Log(ret);
+            fys[wid] = ret;
+            
+
+            string rett = bfr;
+
+            Regex myRegt0 = new Regex("词的相关资料");
+            rett = myRegt0.Replace(rett, ">midxia<");
+
+            Regex myRegt = new Regex("<.*?>");
+            rett = myRegt.Replace(rett, "");
+            Regex myRegt2 = new Regex("\t|\n");
+            rett = myRegt2.Replace(rett, "");
+            rett = "kkkt " + rett + " eeend";
+            Regex myRegt3 = new Regex("kkkt.*?的用法和样例");
+            rett = myRegt3.Replace(rett, "");
+
+            Regex myRegt4 = new Regex("midxia.*?eeend");
+            rett = myRegt4.Replace(rett, "");
+            
+
+            rett = rett.Replace("？", "。");
+            rett = rett.Replace("!", "。");
+
+            string[] stringTmp = rett.Split('。');
+            for (int i = 0; i < stringTmp.Length; i++)
+            {
+                Regex theword = new Regex("(?=.*?" + ow + ")");
+                if (theword.IsMatch(stringTmp[i]) == false || (stringTmp[i].Length > 60 || stringTmp[i].Length < 30))
+                {
+                    stringTmp[i] = "此词含义单一，请直接看翻译";
+                }
+            }
+
+            string finalr = "wrong001+";
+            string finalr2 = "wrong001+";
+            for (int i = 0; i < 100; i++)
+            {
+                finalr = stringTmp[UnityEngine.Random.Range(0, stringTmp.Length)];
+                for(i=0;i<100;i++)
+                {
+                    finalr2 = stringTmp[UnityEngine.Random.Range(0, stringTmp.Length)];
+                    if (finalr2 != finalr&& finalr2 != "此词含义单一，请直接看翻译")
+                        break;
+                }
+                if (finalr != "此词含义单一，请直接看翻译")
+                    break;
+            }
+            if(finalr2 == finalr)
+            {
+                finalr2 = fys[wid]+":__________";
+            }
+            UnityEngine.Debug.Log(finalr);
+            ljs[wid] = finalr;
+            ljs[wid+10] = finalr2;
+            //ljsnoword[wid] = finalr.Replace(ow,"__________");
+
+            getok++;
+
+        }
+
+
+    }
+
+    public void luanljs()
+    {
+        for (int i = 0; i < ljsluana.Length; i++)
+        {
+            ljsluana[i] = i%10;
+        }
+
+        for(int i=0;i<100;i++)
+        {
+            //string lst;
+            int lsi;
+            int sjfrom = UnityEngine.Random.Range(0, 20);
+            int sjto= UnityEngine.Random.Range(0, 20);
+            
+            //lst = ljsluan[sjto];
+            lsi = ljsluana[sjto];
+
+            //ljsluan[sjto] = ljsluan[sjfrom];
+            ljsluana[sjto] = ljsluana[sjfrom];
+
+            //ljsluan[sjfrom] = lst;
+            ljsluana[sjfrom] = lsi;
+            //finalr = stringTmp[UnityEngine.Random.Range(0, stringTmp.Length)];
+        }
+        for (int i = 0; i <= 19; i++)
+        {
+            ljsluan[i] = ljsnoword[ljsluana[i]];
+        }
+
+        }
+
+    public void kouyf()
+    {
+        for (int i = 0; i < 20; i++)
+        {
+            System.Text.RegularExpressions.MatchCollection matchCol = System.Text.RegularExpressions.Regex.Matches(ljsluan[i], yfck.text.Replace("\n","|"),RegexOptions.IgnoreCase);
+            string[] result = new string[matchCol.Count];
+            if (matchCol.Count > 0)
+            {
+                for (int i2 = 0; i2 < matchCol.Count; i2++)
+                {
+                    result[i2] = matchCol[i2].Value;
+                    ljsluan[i]=ljsluan[i].Replace(result[i2], " [" + yfjs.ToString()+":_____] ");
+                    yfjsa = yfjsa + yfjs.ToString() + ":"+result[i2] + ";";
+                    yfjs++;
+                    UnityEngine.Debug.Log(result[i2]);
+                }
+            }
+            
+        }
+
+    }
+
+    public void mixsth1()
+    {
+        
+        for (int i = 0; i < 10; i++)
+        {
+            wordsluanall = wordsluanall + (i+1).ToString() + "." + words[i] + "   ";
+            //ljsluanall = ljsluanall +"["+ (i+1).ToString() + "." + ljsluan[i] + "]         ";
+            fysall = fysall +"["+ (i + 1).ToString() + "." + words[i] + "→" + fys[i].Replace(" ","")+"]    ";
+            //asall = asall.ToString()+(i + 1).ToString() + ":" + words[ljsluana[i]].ToString()+"  ";
+        }
+        for (int i = 0; i < 20; i++)
+        {
+            ljsluanall = ljsluanall + "[" + (i + 1).ToString() + "." + ljsluan[i] + "]         ";
+            asall = asall.ToString() + (i + 1).ToString() + ":" + words[ljsluana[i]].ToString() + "  ";
+            //asall = asall.ToString() + (i + 1).ToString() + ":" + (ljsluana[i] + 76 * (UnityEngine.Random.Range(123, 1000))).ToString() +"; " ;
+        }
+        
+        asall = "选词填空答案:" + asall + "";
+        yfjsa= "语法填空答案:" + yfjsa + "(建议遮上做)";
+
+    }
+    
+
+    public void czjword()
+    {
+
+        string all =
+            "⚔BEI - AUTOSQ   "
+            + "✏选择恰当的单词填写在____上，在[___]中填写恰当的关联词，代词等"
+            + "\n⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌\n▷" + wordsluanall + "\n⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌\n";
+            
+        for (int i = 0; i < 20; i++)
+        {
+            ljsluan[i] = (i + 1).ToString() + ": " + ljsluan[i].ToString();
+            all += ljsluan[i]+"\n";
+        }
+        all =all + "\n⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌\n➽" + fysall + "\n⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌⚌\n\n✅" + asall + "\n\n✅" + yfjsa;
+        
+
+        string pathall = @"D:/AUTOSQ/"+ "CZJ"+DateTime.Now.Year+ DateTime.Now .Month+DateTime.Now.Day+ DateTime.Now.Hour+ DateTime.Now.Minute+ DateTime.Now.Second + ".txt";
+
+        
+        StreamWriter sw;
+        FileInfo fi = new FileInfo(pathall);
+
+        if (!File.Exists(pathall))
+        {
+            sw = fi.CreateText();
+        }
+        else
+        {
+            sw = fi.AppendText();
+        }
+        sw.WriteLine(all);
+        sw.Close();
+        sw.Dispose();
+
+        UnityEngine.Debug.Log("写入成功");
+
+        note2.text = "已完成！保存在D:\\AUTOSQ文件夹 \n文件名:"+ pathall;
+
+    }
+
+
+    public static void OpenDirectory(string path)
+
+    {
+        Thread newThread = new Thread(new ParameterizedThreadStart(CmdOpenDirectory));
+        newThread.Start(path);
+    }
+
+    private static void CmdOpenDirectory(object obj)
+    {
+        Process p = new Process();
+        p.StartInfo.FileName = "cmd.exe";
+        p.StartInfo.Arguments = "/c start " + obj.ToString();
+        UnityEngine.Debug.Log(p.StartInfo.Arguments);
+        p.StartInfo.UseShellExecute = false;
+        p.StartInfo.RedirectStandardInput = true;
+        p.StartInfo.RedirectStandardOutput = true;
+        p.StartInfo.RedirectStandardError = true;
+        p.StartInfo.CreateNoWindow = true;
+        p.Start();
+        p.WaitForExit();
+        p.Close();
+
+    }
+
+    public void sqagain()
+    {
+        zt = -1;
+    }
+    public void openwjj()
+    {
+        OpenDirectory("D:\\AUTOSQ");
+    }
+
+}
