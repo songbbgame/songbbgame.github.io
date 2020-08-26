@@ -1,0 +1,2553 @@
+此文件是 上海市南洋中学 宋北北 的课题 智能出题 的（主要）代码。
+
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+public class magiccontrol : MonoBehaviour
+{
+    public float sx;
+    public float sy;
+    public float sz;
+    public float syl;
+    public float syc;
+
+
+    //public Text st;
+
+    public int js;
+
+    public int ztok;
+    public int zt;
+    public int ztjs;
+    public float lasttime;
+    public float lasttime2;
+    public float waitdanji;
+    public int snjs;
+
+    public int ci;
+
+    public ParticleSystem t1;
+    public ParticleSystem t2;
+    public ParticleSystem t3;
+
+
+    public Slider s1;
+
+    //public GameObject ball;
+
+    //public Text safe;
+   // public Text min;
+    //public Text db;
+    // Start is called before the first frame update
+    void Start()
+    {
+        s1.value = PlayerPrefs.GetFloat("mi");
+    }
+
+    public void back()
+    {
+        PlayerPrefs.SetFloat("mi",s1.value);
+        SceneManager.LoadScene("mainkt");
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        sy = Input.acceleration.y;
+        syc = Mathf.Abs(sy - syl);
+        if (ztok == 1)
+        {
+            if (syc >0.002 && js < 0)
+            {
+                truepress();
+                js = 4;
+                //GameObject.Instantiate(ball, new Vector3(0, 4, 0), transform.rotation);
+            }
+        }
+        syl = sy;
+
+
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            //ci = 1;
+        }
+
+        }
+    void FixedUpdate()
+    {
+        //db.text = "syc" + syc.ToString() + "\n" + ztok.ToString();
+        if (syc> 0.009f)
+        {
+            zt++;
+        }
+        ztjs++;
+        if(ztjs%50==0)
+        {
+            if(zt>10)
+            {
+                ztok = 0;
+            }
+            else
+            {
+                ztok = 1;
+            }
+            zt = 0;
+        }
+        js--;
+
+
+        
+        if (ci==1)
+        {
+            ci = 0;
+
+
+            if ((Time.time - lasttime) < 0.3f)
+            {
+                Debug.Log("双击");
+                //Shuangji();
+                t1.Play();
+                t3.Play();
+                waitdanji = 0;
+                js += 20;
+            }
+            else
+            {
+                waitdanji = 1;
+            }
+            lasttime = Time.time;
+
+        }
+    
+
+            if (waitdanji >= 1)
+            {
+                waitdanji += Time.deltaTime;
+            }
+            if (waitdanji > 1.3f)
+            {
+                Debug.Log("点击");
+            t2.Play();
+            //Danji();
+            js += 20;
+            waitdanji = 0;
+            }
+    }
+
+    public void truepress()
+    {
+        ci = 1;
+    }
+}
+
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+public class chooseword : MonoBehaviour
+{
+   
+
+    public Text showword;
+    public InputField wordid;
+
+    public InputField words;
+
+    public TextAsset ck;
+    public string[] cks;
+
+    public int cdjs;
+    // Start is called before the first frame update
+    void Start()
+    {
+        wordid.text = PlayerPrefs.GetInt("wid").ToString();
+        cks = ck.text.Split('\n');
+        changeword();
+    }
+
+    public void changeword()
+    {
+        showword.text = cks[int.Parse(wordid.text)];
+    }
+    public void nextword()
+    {
+        wordid.text = (int.Parse(wordid.text) + 1).ToString();
+        showword.text = cks[int.Parse(wordid.text)];
+    }
+    public void addword()
+    {
+        string[] thisword = cks[int.Parse(wordid.text)].Split(' ');
+        if (words.text.Length > 2)
+        {
+            words.text = words.text + " " + thisword[0];
+        }
+
+        else
+            words.text = words.text  + thisword[0];
+
+        wordid.text = (int.Parse(wordid.text) + 1).ToString();
+        showword.text = cks[int.Parse(wordid.text)];
+    }
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        cdjs++;
+        if(cdjs%50==0)
+        PlayerPrefs.SetInt("wid", int.Parse(wordid.text));
+    }
+}
+
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using System;
+
+public class addwordmain : MonoBehaviour
+{
+    public CanvasGroup c1;
+    public CanvasGroup c2;
+
+    public Text anote;
+
+    public int editing;
+    public Text editnote;
+
+    public int zt = 0;
+
+    public Text shw1;
+    public Text shw2;
+    public Text shw3;
+    public Text shw4;
+    public Text shw5;
+    public Text shw6;
+
+    public Image[] bs;
+    // Start is called before the first frame update
+    void Start()
+    {
+        int addok = 0;
+        for (int i = 0; i < 6; i++)
+        {
+            string bget = PlayerPrefs.GetString("z" + DateTime.Now.Year % 100 + DateTime.Now.Month + DateTime.Now.Day + (i + 1).ToString());
+            if (i < 5)
+            {
+                
+                if (bget.Length < 10)
+                {
+                    bs[i + 1].GetComponent<Button>().interactable = false;
+                    bs[i + 1].color = new Color(1, 1, 1);
+                }
+            }
+            if (bget.Length > 10)
+            {
+                addok++;
+            }
+         }
+        if(addok==0)
+            anote.text = "我们添加一组(10个)单词吧！\n请点击绿色按钮";
+        if (addok == 1)
+            anote.text = "一天只背十个太少了！\n至少再添加一组吧";
+        if (addok == 2)
+            anote.text = "可以点黄色按钮返回了\n当然也可以继续添加！";
+        if (addok == 3)
+            anote.text = "你添加了三组！\n也就是三十个！";
+        if (addok == 4)
+            anote.text = "你添加了四组了！\n可以试试能不能记得住哦！";
+        if (addok == 5)
+            anote.text = "你添加了五十个！\n真多！";
+        if (addok == 6)
+            anote.text = "哇哦，六十个！\n要加油背啊！";
+
+        shw1.text = PlayerPrefs.GetString("z" + DateTime.Now.Year % 100 + DateTime.Now.Month + DateTime.Now.Day + "1");
+        shw2.text = PlayerPrefs.GetString("z" + DateTime.Now.Year % 100 + DateTime.Now.Month + DateTime.Now.Day + "2");
+        shw3.text = PlayerPrefs.GetString("z" + DateTime.Now.Year % 100 + DateTime.Now.Month + DateTime.Now.Day + "3");
+        shw4.text = PlayerPrefs.GetString("z" + DateTime.Now.Year % 100 + DateTime.Now.Month + DateTime.Now.Day + "4");
+        shw5.text = PlayerPrefs.GetString("z" + DateTime.Now.Year % 100 + DateTime.Now.Month + DateTime.Now.Day + "5");
+        shw6.text = PlayerPrefs.GetString("z" + DateTime.Now.Year % 100 + DateTime.Now.Month + DateTime.Now.Day + "6");
+
+        if (shw1.text.Length < 5)
+            shw1.text = "第一组（空）";
+        if (shw2.text.Length < 5)
+            shw2.text = "第二组（空）";
+        if (shw3.text.Length < 5)
+            shw3.text = "第三组（空）";
+        if (shw4.text.Length < 5)
+            shw4.text = "第四组（空）";
+        if (shw5.text.Length < 5)
+            shw5.text = "第五组（空）";
+        if (shw6.text.Length < 5)
+            shw6.text = "第六组（空）";
+
+
+
+    }
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        if (zt == 1)
+        {
+            c1.blocksRaycasts = false;
+            c2.blocksRaycasts = false;
+            if (c1.alpha > 0)
+                c1.alpha = c1.alpha - 0.05f;
+            else
+                c1.gameObject.SetActive(false);
+            if (c2.alpha < 1)
+                c2.alpha = c2.alpha + 0.05f;
+            c2.gameObject.SetActive(true);
+            if(c1.alpha <= 0&& c2.alpha >=1)
+            {
+                c1.gameObject.SetActive(false);
+                c2.gameObject.SetActive(true);
+                c1.blocksRaycasts = true;
+                c2.blocksRaycasts = true;
+                zt = 0;
+            }
+        }
+        if (zt == -1)
+        {
+            c1.blocksRaycasts = false;
+            c2.blocksRaycasts = false;
+            if (c2.alpha > 0)
+                c2.alpha = c2.alpha - 0.05f;
+            else
+                SceneManager.LoadScene("addword");
+        }
+        if (zt == -2)
+        {
+            c1.blocksRaycasts = false;
+            c2.blocksRaycasts = false;
+            if (c1.alpha > 0)
+                c1.alpha = c1.alpha - 0.05f;
+            else
+                SceneManager.LoadScene("mainkt");
+
+        }
+        if (zt == 0)
+        {
+            if (c1.alpha < 1)
+                c1.alpha = c1.alpha + 0.05f;
+        }
+
+        
+    }
+
+    public void okallback()
+    {
+        zt = -2;
+    }
+
+    public void edit1()
+    {
+        editing = 1;
+        zt = 1;
+        editnote.text = "编辑第" +editing.ToString()+ "组";
+        Debug.Log(shw1.text.Length);
+        if(shw1.text.Length>10)
+        gameObject.GetComponent<choosewordm>().word.text = shw1.text;
+    }
+    
+    public void edit2()
+    {
+        editing = 2;
+        zt = 1;
+        editnote.text = "编辑第" + editing.ToString() + "组";
+        if (shw2.text.Length > 10)
+            gameObject.GetComponent<choosewordm>().word.text = shw2.text;
+    }
+    public void edit3()
+    {
+        editing = 3;
+        zt = 1;
+        editnote.text = "编辑第" + editing.ToString() + "组";
+        if (shw3.text.Length > 10)
+            gameObject.GetComponent<choosewordm>().word.text = shw3.text;
+    }
+    public void edit4()
+    {
+        editing = 4;
+        zt = 1;
+        editnote.text = "编辑第" + editing.ToString() + "组";
+        if (shw4.text.Length > 10)
+            gameObject.GetComponent<choosewordm>().word.text = shw4.text;
+    }
+    public void edit5()
+    {
+        editing = 5;
+        zt = 1;
+        editnote.text = "编辑第" + editing.ToString() + "组";
+        if (shw5.text.Length > 10)
+            gameObject.GetComponent<choosewordm>().word.text = shw5.text;
+    }
+    public void edit6()
+    {
+        editing = 6;
+        zt = 1;
+        editnote.text = "编辑第" + editing.ToString() + "组";
+        if (shw6.text.Length > 10)
+            gameObject.GetComponent<choosewordm>().word.text = shw6.text;
+    }
+
+}
+
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using UnityEngine;
+using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+public class autosqm : MonoBehaviour
+{
+    /// <summary>
+    /// 思路整理
+    /// 输入单词，扫二维码，和单词选择界面
+    /// 直接电脑版生成逻辑移植
+    /// 
+    /// 背单词，初步，显示
+    /// 最终测验，就是词组卷测验
+    /// 
+    /// </summary>
+    public int zuid;
+
+    public string[] words;
+    public string[] fys;
+    public int[] wzt;
+
+    public Vector2 anpos;
+    public float lasttime;
+    public float waitdanji;
+
+    public int getok;
+    public int getokf;
+
+    public Text anote;
+    public Text doingnote;
+    public Text mt;
+    public Text fyt;
+
+    public Text rnote;
+
+    public Text ttit;
+
+    public int zt;
+    public int nowzt;
+
+    public int now;
+
+    public int n1;
+    public int n2;
+    public int n3;
+
+    public CanvasGroup c1;
+
+    public ParticleSystem lizitext;
+    public RenderTexture rt;
+
+    public int ttzt = 0;
+
+    public int snjs=0;
+
+    public ParticleSystem win;
+    public ParticleSystem lost;
+    public ParticleSystem finish;
+
+    public Transform sun;
+    //public bool canlizi;
+    // Start is called before the first frame update
+    void Start()
+    {
+        zuid= PlayerPrefs.GetInt("ring");
+        if(zuid!=100)
+        words= PlayerPrefs.GetString("z" + DateTime.Now.Year % 100 + DateTime.Now.Month + DateTime.Now.Day + (zuid).ToString()).Trim(' ').Split(' ');
+        else
+        {
+            string allls = PlayerPrefs.GetString("z" + DateTime.Now.Year % 100 + DateTime.Now.Month + DateTime.Now.Day + "1").Trim()+" ";
+            allls += PlayerPrefs.GetString("z" + DateTime.Now.Year % 100 + DateTime.Now.Month + DateTime.Now.Day + "2").Trim() + " ";
+            allls += PlayerPrefs.GetString("z" + DateTime.Now.Year % 100 + DateTime.Now.Month + DateTime.Now.Day + "3").Trim() + " ";
+            allls += PlayerPrefs.GetString("z" + DateTime.Now.Year % 100 + DateTime.Now.Month + DateTime.Now.Day + "4").Trim() + " ";
+            allls += PlayerPrefs.GetString("z" + DateTime.Now.Year % 100 + DateTime.Now.Month + DateTime.Now.Day + "5").Trim() + " ";
+            allls += PlayerPrefs.GetString("z" + DateTime.Now.Year % 100 + DateTime.Now.Month + DateTime.Now.Day + "6").Trim() + " ";
+
+            //allls.Replace("   ", " ");
+            //allls.Replace("  ", " ");
+            Debug.Log(allls);
+            words = allls.Trim().Split();
+            
+        }
+        //fys = allls.Trim().Split();
+        zt = -2;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            snjs = 0;
+            anpos =new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
+            Vector2 chayi = new Vector2(Input.mousePosition.x - anpos.x, Input.mousePosition.y - anpos.y);
+            if (Mathf.Abs(chayi.x) > 100 || Mathf.Abs(chayi.y) > 100)
+            {
+                if (chayi.y > 100)
+                {
+                    Debug.Log("上划");
+                    Huaup();
+                    waitdanji = 0;
+                }
+                if (chayi.y < -100)
+                {
+                    Debug.Log("下划");
+                    Huadown();
+                    waitdanji = 0;
+                }
+                if (Mathf.Abs(chayi.y) <= 100)
+                {
+                    if (chayi.x > 100)
+                    {
+                        Debug.Log("右划");
+                        Huaright();
+                        waitdanji = 0;
+                    }
+                    if (chayi.x < -100)
+                    {
+                        Debug.Log("左划");
+                        Hualeft();
+                        waitdanji = 0;
+                    }
+                }
+            }
+            else
+            {
+                
+
+                if ((Time.time - lasttime) < 0.3f)
+                {
+                    Debug.Log("双击");
+                    Shuangji();
+                    waitdanji = 0;
+                }
+                else
+                {
+                    waitdanji = 1;
+                }
+                lasttime = Time.time;
+
+            }
+        }
+
+            if (waitdanji >= 1)
+            {
+                waitdanji += Time.deltaTime;
+            }
+            if (waitdanji > 1.3f)
+            {
+                Debug.Log("点击");
+                Danji();
+                waitdanji = 0;
+            }
+
+
+        if (getok >= words.Length&&zt==-2)
+        {
+            zt = -1;
+            //scczj2();
+            getok = 0;
+            anote.text = "翻译搜索已完成!";
+            doingnote.text = @"单击屏幕-看翻译
+
+一眼认出-请双击
+
+认不出-请上滑
+
+直到每个都
+一眼认出
+
+左滑两次关闭此提示
+并开始";
+        }
+        else
+        {
+            if (getok > getokf&& getok< words.Length)
+            {
+                StartCoroutine(Getfy(words[getok], getok));
+                getokf++;
+            }
+        }
+
+        if(doingnote.color.a>0&&zt==0)
+        {
+            doingnote.color -= new Color(0,0,0,4*Time.deltaTime);
+        }
+        if (doingnote.color.a <= 0 && zt == 0)
+        {
+            anote.text = "";
+            zt = 1;
+        }
+
+    }
+
+    void FixedUpdate()
+    {
+
+        int wztall = 0;
+        for (int i = 0; i < wzt.Length; i++)
+        {
+            wztall += wzt[i];
+        }
+        //Debug.Log(wztall);
+        sun.eulerAngles = new Vector3(((float)wztall / 10 / (float)words.Length) * 20 - 10, -185, -145);
+        Debug.Log(((float)wztall / 10 / (float)words.Length) * 20 - 10);
+
+        snjs++;
+        if((snjs>100&&zt==1)&& fyt.color.a<0.2f)
+        {
+            anote.text = "看中文-单击\n一眼认出-双击\n认不出-向上滑";
+            anote.color=new Color(0.6f, 1, 1, 1);
+            snjs = 0;
+        }
+        anote.color -= new Color(0, 0, 0, 0.002f);
+        rnote.color -= new Color(0, 0, 0, 0.009f);
+        if (zt == 1)
+        {
+            
+            if (mt.text != words[now])
+            {
+                //canlizi = false;
+                
+                //ttit.text = mt.text;
+                if (mt.color.a > 0)
+                    mt.color -= new Color(0, 0, 0, 0.05f);
+                else
+                {
+                    mt.color = new Color(0.9f-(float)wzt[now]/10, 0.9f + (float)wzt[now] / 10, 0.9f, 0);
+                    Debug.Log((0.9f - (float)wzt[now] /10).ToString() + (0.9f + (float)wzt[now] / 10).ToString());
+                    mt.text = words[now];
+                    //ttit.text = words[now];
+                    //canlizi = true;
+                    //gameObject.GetComponent<rtyot2>().Rtlizi();
+                }
+            }
+            if (now <= fys.Length)
+            {
+                if (fyt.text != fys[now])
+                {
+                    //ttit.text = mt.text;
+                    if (fyt.color.a > 0)
+                        fyt.color -= new Color(0, 0, 0, 0.09f);
+                }
+            }
+                if (mt.text == words[now])
+            {
+                if (mt.color.a < 1)
+                { mt.color += new Color(0, 0, 0, 0.03f); }
+                else
+                {
+                    mt.color = new Color(mt.color.r, mt.color.g, mt.color.b, 1);
+                }
+                if (mt.color.a < 0 && mt.text.Length > 8)
+                    mt.color += new Color(0, 0, 0, 0.01f);
+            }
+        }
+        int ls = 0;
+        for(int i=0;i< words.Length; i++)
+        {
+            if(wzt[i] >= 10)
+            {
+                ls++;
+            }
+        }
+        if(ls>= words.Length)
+        {
+            zt = 100;
+            finish.Play();
+        }
+        if (zt == 100)
+        {
+            anote.text = "已完成！";
+            PlayerPrefs.SetInt("zzt" + DateTime.Now.Year % 100 + DateTime.Now.Month + DateTime.Now.Day + zuid.ToString(),100);
+
+            if (c1.alpha > 0)
+                c1.alpha = c1.alpha - 0.005f;
+            else
+                SceneManager.LoadScene("mainkt");
+        }
+    }
+    public void Danji()
+    {
+        if (zt == 1)
+        {
+            fyt.text =fys[now];
+            fyt.color = new Color(1,1,1, 1f);
+            
+            ttit.text = words[now];
+            Rtlizi();
+            snjs = 0;
+        }
+    }
+    public void Shuangji()
+    {
+        if (zt == 1)
+        {
+            if (fyt.color.a < 0.1f)
+            {
+                anote.text = "请先单击看中文";
+                anote.color = new Color(0.6f, 1, 1, 1);
+            }
+            else
+            {
+                rnote.color = new Color(1, 1, 1, 1f);
+                rnote.text = "能一眼认出" + words[now];
+                win.Play();
+                wzt[now] += 2;
+                now = getnextid();
+                mt.color = new Color(0.9f - (float)wzt[now] / 10, 0.9f + (float)wzt[now] / 10, 0.9f, 0);
+                snjs = 0;
+            }
+        }
+    }
+    public void Huaup()
+    {
+        if (zt == 1)
+        {
+            if (fyt.color.a < 0.1f)
+            {
+                anote.text = "请先点一下屏幕，看中文";
+                anote.color = new Color(0.6f, 1, 1, 1);
+            }
+            else
+            {
+                rnote.color = new Color(1, 1, 1, 1f);
+                rnote.text = "认不出" + words[now];
+                lost.Play();
+                wzt[now] -= 2;
+                now = getnextid();
+                mt.color = new Color(0.9f - (float)wzt[now] / 10, 0.9f + (float)wzt[now] / 10, 0.9f, 0);
+                snjs = 0;
+            }
+        }
+    }
+    public void Huadown()
+    {
+        if(n1!=-1)
+        {
+            now = n1;
+        }
+    }
+    public void Hualeft()
+    {
+        if(zt==-1)
+        {
+            zt = 0;
+            now = 0;
+        }
+    }
+    public void Huaright()
+    {
+
+    }
+
+
+    public int getnextid()
+    {
+        int final = 1;
+                int minw=0;
+                for (int i2 = 0; i2 < words.Length; i2++)
+        {
+            
+                if (wzt[i2]<wzt[minw])
+                    {
+                        minw = i2;
+                    }
+            i2 = i2 + UnityEngine.Random.Range(-1, 2);
+            i2 = i2 % words.Length;
+            i2 = Mathf.Abs(i2);
+        }
+        final = minw;
+
+        for(int i=0;i<5;i++)
+        {
+            if (final == now|| final == n1 || final == n2 || final == n3)
+                final = (now + 1) % words.Length;
+        }
+        
+        n3 = n2;
+        n2 = n1;
+        n1 = now;
+
+        return final;
+    }
+
+    IEnumerator Getfy(string ow, int wid)
+    {
+        UnityWebRequest webRequest = UnityWebRequest.Get("http://dict.cn/" + ow);
+        yield return webRequest.SendWebRequest();
+
+        if (webRequest.isHttpError || webRequest.isNetworkError)
+        {
+            //UnityEngine.Debug.Log(webRequest.error);
+            anote.color = new Color(1, 0, 0);
+            anote.text = "网络未连接，或无法找到:" + ow;
+            words[wid] = "lucky";
+            fys[wid] = "幸运";
+            getok++;
+        }
+
+        else
+        {
+            string ret = webRequest.downloadHandler.text;
+            string bfr = webRequest.downloadHandler.text;
+            Regex myReg0 = new Regex("dict-basic-ul");
+            ret = myReg0.Replace(ret, ">midshang<");
+            Regex myReg02 = new Regex("padding-top: 25px;");
+            ret = myReg02.Replace(ret, ">midxia<");
+            Regex myReg = new Regex("<.*?>");
+            ret = myReg.Replace(ret, "");
+            Regex myReg2 = new Regex("\t|\n");
+            ret = myReg2.Replace(ret, "");
+            ret = "kkkt " + ret + " eeend";
+            Regex myReg3 = new Regex("kkkt.*?midshang");
+            ret = myReg3.Replace(ret, "");
+            Regex myReg4 = new Regex("midxia.*?eeend");
+            ret = myReg4.Replace(ret, "");
+            //string ft = ret;
+            //UnityEngine.Debug.Log(ret);
+            if (ret.Length > 200)
+            {
+                anote.text = "抱歉，出现罕见错误:" + ow;
+                words[wid] = "lucky";
+                fys[wid] = "幸运";
+            }
+            else
+            {
+                fys[wid] = ret.Trim();
+            }
+            getok++;
+
+        }
+
+
+    }
+
+    public void Rtlizi()
+    {
+        ttzt=1;
+        /*
+        //ttit.text = tt;
+
+        Texture texture = rt;
+        Texture2D texture2D = new Texture2D(texture.width, texture.height, TextureFormat.RGBA32, false);
+        //RenderTexture currentRT = RenderTexture.active;
+        RenderTexture renderTexture = RenderTexture.GetTemporary(texture.width, texture.height, 32);
+        Graphics.Blit(texture, renderTexture);
+
+        RenderTexture.active = renderTexture;
+        texture2D.ReadPixels(new Rect(0, 0, renderTexture.width, renderTexture.height), 0, 0);
+        texture2D.Apply();
+
+        ParticleSystem.ShapeModule sh;
+        sh = lizitext.shape;
+        sh.texture = texture2D;
+
+        if (lizitext.isPlaying == false)
+        {
+            lizitext.Play();
+        }
+        else
+        {
+            lizitext.Stop();
+            lizitext.Play();
+        }
+
+
+        //RenderTexture.active = currentRT;
+        RenderTexture.ReleaseTemporary(renderTexture);
+        */
+    }
+
+    private void OnRenderImage(RenderTexture src, RenderTexture des)
+    {
+        Graphics.Blit(src, des);
+        if (ttzt == 1)
+        {
+            Texture texture = rt;
+            Texture2D texture2D = new Texture2D(texture.width, texture.height, TextureFormat.RGBA32, false);
+            //RenderTexture currentRT = RenderTexture.active;
+            RenderTexture renderTexture = RenderTexture.GetTemporary(texture.width, texture.height, 32);
+            Graphics.Blit(texture, renderTexture);
+
+            RenderTexture.active = renderTexture;
+            texture2D.ReadPixels(new Rect(0, 0, renderTexture.width, renderTexture.height), 0, 0);
+            texture2D.Apply();
+
+            ParticleSystem.ShapeModule sh;
+            sh = lizitext.shape;
+            sh.texture = texture2D;
+
+            if (lizitext.isPlaying == false)
+            {
+                lizitext.Play();
+            }
+            else
+            {
+                lizitext.Stop();
+                lizitext.Play();
+            }
+
+
+            //RenderTexture.active = currentRT;
+            RenderTexture.ReleaseTemporary(renderTexture);
+            ttzt = 0;
+        }
+    }
+
+}
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+public class autosqmkt : MonoBehaviour
+{
+    public int zt;//用于场景切换
+    public Image[] bs;
+    public CanvasGroup c1;
+
+    public Image all;
+
+    public Text anote;
+    public Text fst;
+
+    public Image add;
+    public Image allb;
+    public Image exam;
+
+    public string[] wordsall;
+
+
+
+    /// <summary>
+    ///
+    /// 1 没有添加任何单词
+    /// 2 背完了一部分，再细分为背了几组
+    /// 3 每一组都背完了，该去背全部了
+    /// 4 全部背完了，该去试炼了！
+    /// 5 今天全部完成了，该明天再来了！
+    /// </summary>
+    // Start is called before the first frame update
+    void Start()
+    {
+        int addok = 0;
+        int bok = 0;
+        for (int i=0;i<6; i++)
+        {
+            string bget= PlayerPrefs.GetString("z" + DateTime.Now.Year % 100 + DateTime.Now.Month + DateTime.Now.Day + (i+1).ToString());
+            int bget2 = PlayerPrefs.GetInt("zzt" + DateTime.Now.Year % 100 + DateTime.Now.Month + DateTime.Now.Day + (i + 1).ToString());
+            if (bget.Length > 10)
+            {
+                bs[i].GetComponent<Button>().interactable = true;
+                bs[i].color = new Color(1, 0.85f, 0);
+                addok++;
+            }
+            if(bget2==100)
+            {
+                bs[i].GetComponent<Button>().interactable = false;
+                bs[i].color = new Color(0, 1f, 0);
+                bok++;
+            }
+        }
+
+        int allok= PlayerPrefs.GetInt("zzt" + DateTime.Now.Year % 100 + DateTime.Now.Month + DateTime.Now.Day + "100");
+        int examok = PlayerPrefs.GetInt("zzt" + DateTime.Now.Year % 100 + DateTime.Now.Month + DateTime.Now.Day + "666");
+
+        if (addok==0)//没有添加任何单词
+        {
+            add.color= new Color(1, 0.85f, 0);
+            anote.text = "你好！请先添加单词！\n 点击【加】";
+        }
+        if (addok == 1)
+        {
+            add.color = new Color(1, 0.85f, 0);
+            anote.text = "一天只背十个太少了！\n再添加一组吧\n 点击【加】";
+        }
+        if (addok >=2)
+        {
+            //add.color = new Color(1, 0.85f, 0);
+            anote.text = "点击橙色的组号！\n去背诵那组单词吧！";
+        }
+
+        if ((bok == addok&&bok>=2)&&(allok!=100&&examok!=100))
+        {
+            //add.color = new Color(1, 0.85f, 0);
+            allb.GetComponent<Button>().interactable = true;
+            allb.color= new Color(1, 0.85f, 0);
+            anote.text = "点击【全】\n去全部一起复习一下吧！";
+        }
+        if(allok==100 && examok != 100)
+        {
+            exam.color = new Color(1, 0.85f, 0);
+            exam.GetComponent<Button>().interactable = true;
+            anote.text = "快结束了！\n点击【炼】去试炼吧！";
+        }
+        if (allok == 100 && examok == 100)
+        {
+            int fs=PlayerPrefs.GetInt("fenshu" + DateTime.Now.Year % 100 + DateTime.Now.Month + DateTime.Now.Day);
+            int bl=PlayerPrefs.GetInt("bl" + DateTime.Now.Year % 100 + DateTime.Now.Month + DateTime.Now.Day);
+            fst.text = DateTime.Now.Month.ToString() + " / " + DateTime.Now.Day.ToString() + "最终试炼正确率\n" + (((float)fs / (float)bl)*100).ToString("f1") + "% ("+ fs.ToString("f2") + "/" + bl.ToString("f2") + ")";
+            anote.text = "今日已完成\n每天仅有一次机会背和试炼";
+
+        }
+
+    }
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        if(zt==-10)
+        {
+            c1.blocksRaycasts = false;
+            if (c1.alpha > 0)
+                c1.alpha = c1.alpha - 0.05f;
+            else
+                SceneManager.LoadScene("addword");
+        }
+
+        if (zt == 1)
+        {
+            c1.blocksRaycasts = false;
+            if (c1.alpha > 0)
+                c1.alpha = c1.alpha - 0.05f;
+            else
+                SceneManager.LoadScene("main");
+        }
+        if (zt == 2)
+        {
+            c1.blocksRaycasts = false;
+            if (c1.alpha > 0)
+                c1.alpha = c1.alpha - 0.05f;
+            else
+                SceneManager.LoadScene("exam");
+        }
+        if (zt==0)
+        {
+            if (c1.alpha <1)
+                c1.alpha = c1.alpha + 0.05f;
+        }
+    }
+    
+    public void toadd()
+    {
+        zt = -10;
+    }
+
+    public void R1()
+    {
+        PlayerPrefs.SetInt("ring",1);
+        zt = 1;
+    }
+    public void R2()
+    {
+        PlayerPrefs.SetInt("ring", 2);
+        zt = 1;
+    }
+    public void R3()
+    {
+        PlayerPrefs.SetInt("ring", 3);
+        zt = 1;
+    }
+    public void R4()
+    {
+        PlayerPrefs.SetInt("ring", 4);
+        zt = 1;
+    }
+    public void R5()
+    {
+        PlayerPrefs.SetInt("ring", 5);
+        zt = 1;
+    }
+    public void R6()
+    {
+        PlayerPrefs.SetInt("ring", 6);
+        zt = 1;
+    }
+    public void Rall()
+    {
+        PlayerPrefs.SetInt("ring", 100);
+        zt = 1;
+    }
+    public void Rexam()
+    {
+        PlayerPrefs.SetInt("ring", 666);
+        zt = 2;
+    }
+
+    public void tomi()
+    {
+        //PlayerPrefs.SetFloat("mi", s1.value);
+        SceneManager.LoadScene("setting");
+    }
+}
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+public class choosewordm : MonoBehaviour
+{
+
+    public InputField word;
+    public Text wordlsjs;
+
+    public Text showword;
+    public InputField wordid;
+
+    public InputField words;
+
+    public TextAsset ck;
+    public string[] cks;
+
+    public int cdjs;
+
+    public int lsjs;
+
+    public Text editnotetext;
+    // Start is called before the first frame update
+    void Start()
+    {
+
+        wordid.text = PlayerPrefs.GetInt("wid").ToString();
+        
+        cks = ck.text.Split('\n');
+        changeword();
+    }
+
+    public void changeword()
+    {
+        showword.text = cks[int.Parse(wordid.text)];
+    }
+    public void nextword()
+    {
+        wordid.text = (int.Parse(wordid.text) + 1).ToString();
+        showword.text = cks[int.Parse(wordid.text)];
+    }
+    public void lastword()
+    {
+        wordid.text = (int.Parse(wordid.text) - 1).ToString();
+        showword.text = cks[int.Parse(wordid.text)];
+    }
+    public void addword()
+    {
+        string[] thisword = cks[int.Parse(wordid.text)].Split(' ');
+        if (words.text.Length > 1)
+        {
+            words.text = words.text + " " + thisword[0];
+        }
+
+        else
+            words.text = words.text + thisword[0];
+
+        wordid.text = (int.Parse(wordid.text) + 1).ToString();
+        showword.text = cks[int.Parse(wordid.text)];
+    }
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        cdjs++;
+        if (cdjs % 50 == 0)
+            PlayerPrefs.SetInt("wid", int.Parse(wordid.text));
+
+        if (cdjs % 10 == 0)
+        {
+            lsjs = word.text.Split(' ').Length;
+            if (word.text.Length > 1)
+            {
+                if (word.text.Substring(word.text.Length - 1, 1) == " ")
+                    lsjs--;
+                if (lsjs < 10)
+                    wordlsjs.text = "已添加:" + (lsjs).ToString() + "个单词 （请添加十个单词）";
+                if (lsjs == 10)
+                {
+                    wordlsjs.text = "已添加10个单词！";
+                    wordlsjs.color = new Color(0.5f, 0.9f, 0.5f);
+                }
+                else
+                {
+                    if (lsjs < 10)
+                    {
+                        wordlsjs.color = new Color(0.8f, 0.8f, 0.8f);
+                        wordlsjs.text = "已添加:" + (lsjs).ToString() + "个单词!请再添加几个";
+                    }
+                    if (lsjs > 10)
+                    {
+                        wordlsjs.color = new Color(1f, 0.2f, 0.2f);
+                        wordlsjs.text = "已添加:" + (lsjs).ToString() + "个单词!  仅支持添加十个单词 请删掉一些(点击可编辑)";
+                    }
+                }
+
+
+            }
+            else
+                wordlsjs.text = "请输入10个单词";
+
+
+            if (word.text.Length > 2)
+            {
+                if (word.text.Substring(0, 1) == " ")
+                    word.text = word.text.TrimStart(' ');
+            }
+
+            word.text = word.text.Replace("  ", " ");
+        }
+    }
+
+    public void Okback()
+    {
+        if (lsjs == 10)
+        {
+            PlayerPrefs.SetString("z" + DateTime.Now.Year % 100 + DateTime.Now.Month + DateTime.Now.Day + gameObject.GetComponent<addwordmain>().editing.ToString(), " " + word.text + " ");
+            gameObject.GetComponent<addwordmain>().zt = -1;
+        }
+        else {
+            if (words.text.Length <5)
+            {
+                PlayerPrefs.SetString("z" + DateTime.Now.Year % 100 + DateTime.Now.Month + DateTime.Now.Day + gameObject.GetComponent<addwordmain>().editing.ToString(), "");
+                gameObject.GetComponent<addwordmain>().zt = -1;
+            }
+            else
+            {
+                editnotetext.text = "请输入 10 个单词";
+                editnotetext.color = new Color(1, 0.2f, 0.2f);
+            }
+        }
+        
+    }
+}
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.Networking;
+using System;
+using System.Text.RegularExpressions;
+
+//using NPOI.XWPF.UserModel;
+
+using System.IO;
+//using NPOI.OpenXmlFormats.Wordprocessing;
+using System.Diagnostics;
+using System.Threading;
+
+using UnityEngine.SceneManagement;
+using System.Text;
+
+public class czjok1 : MonoBehaviour
+{
+    public InputField word;
+    public Text re;
+    public Text wordlsjs;
+
+    public string[] words;
+    public string[] fys;
+    public string[] ljs;
+
+    public string[] ljsnoword;
+    public string[] ljsluan;
+    public int[] ljsluana;
+
+
+    public TextAsset yfck;
+    public int yfjs = 1;
+    public string  yfjsa;
+
+
+    public int getok;
+    public int getokf;
+
+    public string wordsluanall;
+    public string ljsluanall;
+    public string fysall;
+    public string asall;
+
+    //private const string filePath = @"D:\AUTOSQ";
+    /// 文件名
+    //public string fileName = "test1.docx";
+    public string pathaaa;
+
+    private StreamWriter sw;
+    /// word文档
+    //public  XWPFDocument testdoc = new XWPFDocument();
+
+    public Text snote;
+    public Image mainb;
+
+    public CanvasGroup c1;
+    public Text note2;
+    public CanvasGroup c2;
+
+    public int zt = 0;
+
+
+
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        if (!Directory.Exists(@"D:\AUTOSQ"))
+        {
+            Directory.CreateDirectory(@"D:\AUTOSQ");
+        }
+    }
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        if(zt==1)
+        {
+            if (c1.alpha > 0)
+                c1.alpha = c1.alpha - 0.05f;
+            else
+                c1.gameObject.SetActive(false);
+            if (c2.alpha <1)
+                c2.alpha = c2.alpha + 0.05f;
+            c2.gameObject.SetActive(true);
+        }
+        if (zt == -1)
+        {
+            if (c2.alpha > 0)
+                c2.alpha = c2.alpha - 0.05f;
+            else
+                SceneManager.LoadScene("czj");
+            
+        }
+        if (zt==0)
+        {
+            if (c1.alpha <1)
+                c1.alpha = c1.alpha + 0.05f;
+        }
+
+
+
+
+        int lsjs = word.text.Split(' ').Length;
+        if (word.text.Length > 1)
+        {
+            if (word.text.Substring(word.text.Length - 1, 1) == " ")
+                lsjs--;
+            if(lsjs<10)
+            wordlsjs.text = "已输入:" + (lsjs).ToString() + "个单词 （请输入十个单词）";
+            if (lsjs == 10)
+            {
+                wordlsjs.text = "已输入10个单词！";
+                mainb.color = new Color(0.5f, 0.8f, 0.5f);
+            }
+            else
+            {
+                mainb.color = new Color(0.5f, 0.5f, 0.5f);
+            }
+            if (lsjs> 10)
+                wordlsjs.text = "已输入:" + (lsjs).ToString() + "个单词! 仅支持输入十个单词";
+
+
+        }
+        else
+            wordlsjs.text = "请输入10个单词";
+
+        if (getok >= 10)
+        {
+            scczj2();
+            getok = 0;
+        }
+        else
+        {
+            if (getok > getokf)
+            {
+                StartCoroutine(Getfylj(words[getok], getok));
+                getokf++;
+            }
+        }
+
+        if (word.text.Length > 2)
+        {
+            if (word.text.Substring(0, 1) == " ")
+                word.text = word.text.TrimStart(' ');
+        }
+
+        word.text = word.text.Replace("  ", " ");
+        word.text = word.text.Replace("   ", " ");
+
+        
+
+    }
+
+
+    public void scczj()
+    {
+
+        int lsjs = word.text.Split(' ').Length;
+        if (word.text.Length > 1)
+        {
+            if (word.text.Substring(word.text.Length - 1, 1) == " ")
+                lsjs--;
+            if(lsjs==10)
+            {
+
+                zt = 1;
+
+                if (word.text.Substring(word.text.Length - 1, 1) == " ")
+                    word.text = word.text.TrimEnd(' ');
+
+                words = word.text.Split(' ');
+                for (int i = 0; i < words.Length; i++)
+                {
+                    words[i] = words[i].Replace(" ", "");
+                }
+                StartCoroutine(Getfylj(words[getok], getok));
+
+
+
+            }
+        }
+
+        
+    }
+    public void scczj2()
+    {
+        
+        for (int i = 0; i < words.Length; i++)
+        {
+            ljsnoword[i] = ljs[i].Replace(words[i], "__________");
+            ljsnoword[i+10] = ljs[i+10].Replace(words[i], "__________");
+        }
+        
+        //ljsluan = ljsnoword;
+        
+        Invoke("luanljs", 0.2f);
+        Invoke("kouyf", 0.4f);
+        Invoke("mixsth1", 0.6f);
+        Invoke("czjword", 0.8f);
+    }
+
+        public void dbs()
+    {
+        //UnityEngine.Debug.Log("words[1]"+words[1]);
+        //UnityEngine.Debug.Log("ljs[1]" + ljs[1]);
+    }
+
+ 
+    IEnumerator Getfylj(string ow, int wid)
+    {
+        UnityWebRequest webRequest = UnityWebRequest.Get("http://dict.cn/" + ow);
+        yield return webRequest.SendWebRequest();
+
+        if (webRequest.isHttpError || webRequest.isNetworkError)
+        {
+            //UnityEngine.Debug.Log(webRequest.error);
+            snote.color = new Color(1,0,0);
+            snote.text = "抱歉，无法找到:"+ow;
+            words[wid] = "lucky";
+            fys[wid] = "幸运！";
+            ljs[wid] ="-_-";
+            ljs[wid + 10] = "-_-";
+            getok++;
+        }
+            
+        else
+        {
+            string ret = webRequest.downloadHandler.text;
+            string bfr = webRequest.downloadHandler.text;
+            Regex myReg0 = new Regex("dict-basic-ul");
+            ret = myReg0.Replace(ret, ">midshang<");
+            Regex myReg02 = new Regex("padding-top: 25px;");
+            ret = myReg02.Replace(ret, ">midxia<");
+            Regex myReg = new Regex("<.*?>");
+            ret = myReg.Replace(ret, "");
+            Regex myReg2 = new Regex("\t|\n");
+            ret = myReg2.Replace(ret, "");
+            ret = "kkkt " + ret + " eeend";
+            Regex myReg3 = new Regex("kkkt.*?midshang");
+            ret = myReg3.Replace(ret, "");
+            Regex myReg4 = new Regex("midxia.*?eeend");
+            ret = myReg4.Replace(ret, "");
+            //string ft = ret;
+            //UnityEngine.Debug.Log(ret);
+            fys[wid] = ret;
+            
+
+            string rett = bfr;
+
+            Regex myRegt0 = new Regex("词的相关资料");
+            rett = myRegt0.Replace(rett, ">midxia<");
+
+            Regex myRegt = new Regex("<.*?>");
+            rett = myRegt.Replace(rett, "");
+            Regex myRegt2 = new Regex("\t|\n");
+            rett = myRegt2.Replace(rett, "");
+            rett = "kkkt " + rett + " eeend";
+            Regex myRegt3 = new Regex("kkkt.*?的用法和样例");
+            rett = myRegt3.Replace(rett, "");
+
+            Regex myRegt4 = new Regex("midxia.*?eeend");
+            rett = myRegt4.Replace(rett, "");
+            
+
+            rett = rett.Replace("？", "。");
+            rett = rett.Replace("!", "。");
+
+            string[] stringTmp = rett.Split('。');
+            for (int i = 0; i < stringTmp.Length; i++)
+            {
+                Regex theword = new Regex("(?=.*?" + ow + ")");
+                if (theword.IsMatch(stringTmp[i]) == false || (stringTmp[i].Length > 200 || stringTmp[i].Length < 30))
+                {
+                    stringTmp[i] = "此词含义单一，请直接看翻译";
+                }
+            }
+
+            string finalr = "wrong001+";
+            string finalr2 = "wrong001+";
+            for (int i = 0; i < 100; i++)
+            {
+                finalr = stringTmp[UnityEngine.Random.Range(0, stringTmp.Length)];
+                for(i=0;i<100;i++)
+                {
+                    finalr2 = stringTmp[UnityEngine.Random.Range(0, stringTmp.Length)];
+                    if (finalr2 != finalr&& finalr2 != "此词含义单一，请直接看翻译")
+                        break;
+                }
+
+                //UnityEngine.Debug.Log("-111-"+finalr+"-222-" + finalr2);
+
+                if (finalr != "此词含义单一，请直接看翻译")
+                    break;
+            }
+            if(finalr2 == finalr)
+            {
+                finalr2 = fys[wid]+":__________";
+            }
+            //UnityEngine.Debug.Log(finalr);
+            ljs[wid] = finalr.Trim();
+            ljs[wid+10] = finalr2.Trim();
+            //ljsnoword[wid] = finalr.Replace(ow,"__________");
+
+            getok++;
+
+        }
+
+
+    }
+
+    public void luanljs()
+    {
+        for (int i = 0; i < ljsluana.Length; i++)
+        {
+            ljsluana[i] = i;
+        }
+
+        for (int i2 = 0; i2 < ljsluana.Length; i2++)
+        {
+            int temp = ljsluana[i2];
+            int randomIndex = UnityEngine.Random.Range(0, ljsluana.Length);
+            ljsluana[i2] = ljsluana[randomIndex];
+            ljsluana[randomIndex] = temp;
+        }
+
+        for (int i = 0; i <= 19; i++)
+        {
+            ljsluan[i] = ljsnoword[ljsluana[i]];
+        }
+
+        }
+
+    public void kouyf()
+    {
+        for (int i = 0; i < 20; i++)
+        {
+            System.Text.RegularExpressions.MatchCollection matchCol = System.Text.RegularExpressions.Regex.Matches(ljsluan[i], yfck.text.Replace("\n",@"|"),RegexOptions.IgnoreCase);
+            string[] result = new string[matchCol.Count];
+            if (matchCol.Count > 0)
+            {
+                for (int i2 = 0; i2 < matchCol.Count; i2++)
+                {
+                    result[i2] = matchCol[i2].Value;
+                    int wp = ljsluan[i].IndexOf(result[i2]);
+                    string aw = ljsluan[i].Substring(wp + result[i2].Length , 1);
+                    //UnityEngine.Debug.Log(aw);
+                    if (aw == " "&& result[i2].Length>4)
+                    {
+                        ljsluan[i] = ljsluan[i].Replace(result[i2], "[" + yfjs.ToString() + ":____]");
+                        yfjsa = yfjsa + yfjs.ToString() + ":" + result[i2] + ";";
+                        yfjs++;
+                    }
+                    else
+                    {
+                        if ((aw == " " && result[i2].Length > 3)&& UnityEngine.Random.Range(0, 4) == 1)
+                        {
+                            ljsluan[i] = ljsluan[i].Replace(result[i2], "[" + yfjs.ToString() + ":____]");
+                            yfjsa = yfjsa + yfjs.ToString() + ":" + result[i2] + ";";
+                            yfjs++;
+                        }
+                        else
+                        {
+                            if ((aw == " " && result[i2].Length > 1)&&UnityEngine.Random.Range(0,7)==1)
+                            {
+                                ljsluan[i] = ljsluan[i].Replace(result[i2], "[" + yfjs.ToString() + ":____]");
+                                yfjsa = yfjsa + yfjs.ToString() + ":" + result[i2] + ";";
+                                yfjs++;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void mixsth1()
+    {
+        
+        for (int i = 0; i < 10; i++)
+        {
+            wordsluanall = wordsluanall + (i+1).ToString() + "." + words[i] + " ";
+            //ljsluanall = ljsluanall +"["+ (i+1).ToString() + "." + ljsluan[i] + "]         ";
+            fysall = fysall +"["+ (i + 1).ToString() + "." + words[i] + "→" + fys[i].Replace(" ","")+"]  ";
+            //asall = asall.ToString()+(i + 1).ToString() + ":" + words[ljsluana[i]].ToString()+"  ";
+        }
+        for (int i = 0; i < 20; i++)
+        {
+            ljsluanall = ljsluanall + "[" + (i + 1).ToString() + "." + ljsluan[i] + "]         ";
+            asall = asall.ToString() + (i + 1).ToString() + ":" + words[ljsluana[i]%10].ToString() + "  ";
+            //asall = asall.ToString() + (i + 1).ToString() + ":" + (ljsluana[i] + 76 * (UnityEngine.Random.Range(123, 1000))).ToString() +"; " ;
+        }
+        
+        asall = "选词填空答案: " + asall + "";
+        yfjsa= "语法填空答案: " + yfjsa + "(建议遮上做)";
+
+    }
+    
+
+    public void czjword()
+    {
+
+        string all =
+            "⚔AUTOSQ   "
+            + "✏选择恰当的单词填写在____上，在[___]中填写恰当的关联词，代词等"
+            + "\n-------------------------------------\n▷" + wordsluanall + "\n-------------------------------------\n";
+            
+        for (int i = 0; i < 20; i++)
+        {
+            ljsluan[i] = (i + 1).ToString() + ": " + ljsluan[i].ToString();
+            all += ljsluan[i]+"\n";
+        }
+        all =all + "\n-------------------------------------\n➽" + fysall + "\n-------------------------------------\n✅" + asall + "\n✅" + yfjsa;
+
+        int zid = 1;
+
+        if (!Directory.Exists(@"D:/AUTOSQ/" + DateTime.Now.Year % 100 + "_" + DateTime.Now.Month + "_" + DateTime.Now.Day))
+        {
+            Directory.CreateDirectory(@"D:/AUTOSQ/" + DateTime.Now.Year % 100 + "_" + DateTime.Now.Month + "_" + DateTime.Now.Day);
+        }
+
+        for (int i=0;i<1000;i++)
+        {
+            if (File.Exists(@"D:/AUTOSQ/" + DateTime.Now.Year % 100 + "_" + DateTime.Now.Month + "_" + DateTime.Now.Day + "/" + zid.ToString() + "_" + DateTime.Now.Month + "-" + DateTime.Now.Day + ".txt"))
+            {
+                zid++;
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        string pathall = @"D:/AUTOSQ/"+DateTime.Now.Year%100+"_"+ DateTime.Now .Month+"_"+DateTime.Now.Day+"/"+ zid.ToString ()+"_"+ DateTime.Now.Month + "-" + DateTime.Now.Day + ".txt";
+
+        
+
+        StreamWriter sw;
+        FileInfo fi = new FileInfo(pathall);
+
+        if (!File.Exists(pathall))
+        {
+            sw = fi.CreateText();
+        }
+        else
+        {
+            sw = fi.AppendText();
+        }
+        sw.WriteLine(all);
+        sw.Close();
+        sw.Dispose();
+
+        UnityEngine.Debug.Log("写入成功");
+
+        note2.text = "已完成！保存在D:\\AUTOSQ文件夹 \n文件名:"+ pathall;
+
+    }
+
+
+    public static void OpenDirectory(string path)
+
+    {
+        Thread newThread = new Thread(new ParameterizedThreadStart(CmdOpenDirectory));
+        newThread.Start(path);
+    }
+
+    private static void CmdOpenDirectory(object obj)
+    {
+        Process p = new Process();
+        p.StartInfo.FileName = "cmd.exe";
+        p.StartInfo.Arguments = "/c start " + obj.ToString();
+        //UnityEngine.Debug.Log(p.StartInfo.Arguments);
+        p.StartInfo.UseShellExecute = false;
+        p.StartInfo.RedirectStandardInput = true;
+        p.StartInfo.RedirectStandardOutput = true;
+        p.StartInfo.RedirectStandardError = true;
+        p.StartInfo.CreateNoWindow = true;
+        p.Start();
+        p.WaitForExit();
+        p.Close();
+
+    }
+
+    public void sqagain()
+    {
+        zt = -1;
+    }
+    public void openwjj()
+    {
+        OpenDirectory("D:\\AUTOSQ");
+    }
+
+}
+
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using UnityEngine;
+using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+public class exam : MonoBehaviour
+{
+    /// <summary>
+    /// 思路整理
+    /// 输入单词，扫二维码，和单词选择界面
+    /// 直接电脑版生成逻辑移植
+    /// 
+    /// 背单词，初步，显示
+    /// 最终测验，就是词组卷测验
+    /// 
+    /// </summary>
+    public int zuid;
+
+    public string[] words;
+    public string[] fys;
+    public int[] wzt;
+
+    public Vector2 anpos;
+    public float lasttime;
+    public float waitdanji;
+
+    public int getok;
+    public int getokf;
+
+    public Text anote;
+    public Text doingnote;
+    public Text mt;
+    public Text fyt;
+
+    public Text rnote;
+
+    //public Text ttit;
+
+    public int zt;
+   // public int nowzt;
+
+    public int now;
+
+    public int n1;
+    public int n2;
+    public int n3;
+
+    public CanvasGroup c1;
+
+    //public ParticleSystem lizitext;
+    //public RenderTexture rt;
+
+    //public int ttzt = 0;
+
+    public int snjs=0;
+
+    public ParticleSystem win;
+    public ParticleSystem lost;
+
+    public int nowa;
+    public int fenshu;
+    public int bl;
+
+    public Transform sun;
+
+    //public bool canlizi;
+    // Start is called before the first frame update
+    void Start()
+    {
+        zuid= PlayerPrefs.GetInt("ring");
+        
+            if (zuid == 666)
+            {
+                string allls = PlayerPrefs.GetString("z" + DateTime.Now.Year % 100 + DateTime.Now.Month + DateTime.Now.Day + "1").Trim() + " ";
+            allls += PlayerPrefs.GetString("z" + DateTime.Now.Year % 100 + DateTime.Now.Month + DateTime.Now.Day + "2").Trim() + " ";
+            allls += PlayerPrefs.GetString("z" + DateTime.Now.Year % 100 + DateTime.Now.Month + DateTime.Now.Day + "3").Trim() + " ";
+            allls += PlayerPrefs.GetString("z" + DateTime.Now.Year % 100 + DateTime.Now.Month + DateTime.Now.Day + "4").Trim() + " ";
+            allls += PlayerPrefs.GetString("z" + DateTime.Now.Year % 100 + DateTime.Now.Month + DateTime.Now.Day + "5").Trim() + " ";
+            allls += PlayerPrefs.GetString("z" + DateTime.Now.Year % 100 + DateTime.Now.Month + DateTime.Now.Day + "6").Trim() + " ";
+
+            allls.Replace("   ", "");
+                allls.Replace("  ", "");
+                words = allls.Trim().Split();
+                //fys = words;
+            }
+
+        
+        //bl = words.Length / 2;
+        //fys = words;
+        zt = -2;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            snjs = 0;
+            anpos =new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
+            Vector2 chayi = new Vector2(Input.mousePosition.x - anpos.x, Input.mousePosition.y - anpos.y);
+            if (Mathf.Abs(chayi.x) > 100 || Mathf.Abs(chayi.y) > 100)
+            {
+                if (chayi.y > 100)
+                {
+                    Debug.Log("上划");
+                    Huaup();
+                    waitdanji = 0;
+                }
+                if (chayi.y < -100)
+                {
+                    Debug.Log("下划");
+                    Huadown();
+                    waitdanji = 0;
+                }
+                if (Mathf.Abs(chayi.y) <= 100)
+                {
+                    if (chayi.x > 100)
+                    {
+                        Debug.Log("右划");
+                        Huaright();
+                        waitdanji = 0;
+                    }
+                    if (chayi.x < -100)
+                    {
+                        Debug.Log("左划");
+                        Hualeft();
+                        waitdanji = 0;
+                    }
+                }
+            }
+            else
+            {
+                
+
+                if ((Time.time - lasttime) < 0.3f)
+                {
+                    Debug.Log("双击");
+                    Shuangji();
+                    waitdanji = 0;
+                }
+                else
+                {
+                    waitdanji = 1;
+                }
+                lasttime = Time.time;
+
+            }
+        }
+
+            if (waitdanji >= 1)
+            {
+                waitdanji += Time.deltaTime;
+            }
+            if (waitdanji > 1.3f)
+            {
+                Debug.Log("点击");
+                Danji();
+                waitdanji = 0;
+            }
+
+
+        if (getok >= words.Length&&zt==-2)
+        {
+            zt = -1;
+            //scczj2();
+            getok = 0;
+            anote.text = "翻译搜索已完成!";
+            doingnote.text = @"单词的中文正确
+请双击
+
+单词和中文不对应
+请上划
+
+左滑两次关闭此提示
+并开始";
+        }
+        else
+        {
+            if (getok > getokf&& getok< words.Length)
+            {
+                StartCoroutine(Getfy(words[getok], getok));
+                getokf++;
+            }
+        }
+
+        if(doingnote.color.a>0&&zt==0)
+        {
+            doingnote.color -= new Color(0,0,0,4*Time.deltaTime);
+        }
+        if (doingnote.color.a <= 0 && zt == 0)
+        {
+            anote.text = "";
+            zt = 1;
+        }
+    }
+
+    void FixedUpdate()
+    {
+
+
+        int wztall = 0;
+        for (int i = 0; i < wzt.Length; i++)
+        {
+            wztall += wzt[i];
+        }
+        //Debug.Log(wztall);
+        sun.eulerAngles = new Vector3(((float)bl *2 / (float)words.Length) * 20 - 10, -185, -145);
+        Debug.Log(((float)wztall / 10 / (float)words.Length) * 20 - 10);
+
+
+        snjs++;
+        if(snjs>100&&zt==1)
+        {
+            anote.text = "单词和中文\n对应正确请双击\n对应错误请上划";
+            anote.color=new Color(0.6f, 1, 1, 1);
+            snjs = 0;
+        }
+        anote.color -= new Color(0, 0, 0, 0.002f);
+        rnote.color -= new Color(0, 0, 0, 0.009f);
+        if (zt == 1)
+        {
+            
+            if (mt.text != words[now])
+            {
+                if (mt.color.a > 0)
+                    mt.color -= new Color(0, 0, 0, 0.05f);
+                else
+                {
+                    mt.color = new Color(0.9f-(float)wzt[now]/10, 0.9f + (float)wzt[now] / 10, 0.9f, 0);
+                    Debug.Log((0.9f - (float)wzt[now] /10).ToString() + (0.9f + (float)wzt[now] / 10).ToString());
+                    mt.text = words[now];
+                    nowa = UnityEngine.Random.Range(0,2);
+                    if (nowa == 1)
+                        fyt.text = fys[now];
+                    else
+                    {
+                        fyt.text = fys[(now+ UnityEngine.Random.Range(2, 8))%words.Length];
+                    }
+                }
+            }
+           
+                if (mt.text == words[now])
+            {
+                
+                if (mt.color.a < 1)
+                { mt.color += new Color(0, 0, 0, 0.03f); }
+                else
+                {
+                    mt.color = new Color(mt.color.r, mt.color.g, mt.color.b, 1);
+                }
+            }
+
+            fyt.color = mt.color;
+        }
+        int ls = 0;
+        for(int i=0;i< words.Length; i++)
+        {
+            if(wzt[i] >= 10)
+            {
+                ls++;
+            }
+        }
+        if (bl>words.Length)
+        {
+            zt = 100;
+        }
+        if (zt == 100)
+        {
+            anote.text = "已完成！";
+            PlayerPrefs.SetInt("zzt" + DateTime.Now.Year % 100 + DateTime.Now.Month + DateTime.Now.Day + zuid.ToString(),100);
+            PlayerPrefs.SetInt("fenshu" + DateTime.Now.Year % 100 + DateTime.Now.Month + DateTime.Now.Day , fenshu);
+            PlayerPrefs.SetInt("bl" + DateTime.Now.Year % 100 + DateTime.Now.Month + DateTime.Now.Day, bl);
+            if (c1.alpha > 0)
+                c1.alpha = c1.alpha - 0.01f;
+            else
+                SceneManager.LoadScene("mainkt");
+        }
+        
+    }
+    public void Danji()
+    {
+        /*
+        if (zt == 1)
+        {
+            fyt.text =fys[now];
+            fyt.color = new Color(1,1,1, 1f);
+            
+            ttit.text = words[now];
+            Rtlizi();
+            snjs = 0;
+        }
+        */
+    }
+    public void Shuangji()
+    {
+        if (zt == 1)
+        {
+           if(nowa==1)
+            {
+                rnote.color = new Color(0.9f, 1, 0.9f, 1f);
+                rnote.text = "你认为翻译正确！\n你对了！" + words[now];
+                win.Play();
+                wzt[now] += 2;
+                now = getnextid();
+                mt.color = new Color(0.9f - (float)wzt[now] / 10, 0.9f + (float)wzt[now] / 10, 0.9f, 0);
+                snjs = 0;
+                fenshu++;
+                bl++;
+            }
+
+            if (nowa == 0)
+            {
+                rnote.color = new Color(1, 0.9f, 0.9f, 1f);
+                rnote.text = "你觉得翻译正确？\n你错了！" + words[now];
+                lost.Play();
+                wzt[now] += 2;
+                now = getnextid();
+                mt.color = new Color(0.9f - (float)wzt[now] / 10, 0.9f + (float)wzt[now] / 10, 0.9f, 0);
+                snjs = 0;
+                bl++;
+            }
+
+
+        }
+    }
+    public void Huaup()
+    {
+        if (zt == 1)
+        {
+            if (nowa == 0)
+            {
+                rnote.color = new Color(0.9f, 1, 0.9f, 1f);
+                rnote.text = "你看出翻译错误\n你看出来了！" + words[now];
+                win.Play();
+                wzt[now] += 2;
+                now = getnextid();
+                mt.color = new Color(0.9f - (float)wzt[now] / 10, 0.9f + (float)wzt[now] / 10, 0.9f, 0);
+                snjs = 0;
+                fenshu++;
+                bl++;
+            }
+
+            if (nowa == 1)
+            {
+                rnote.color = new Color(1, 0.9f, 0.9f, 1f);
+                rnote.text = "你觉得翻译错误？\n其实是正确的！" + words[now];
+                lost.Play();
+                wzt[now] += 2;
+                now = getnextid();
+                mt.color = new Color(0.9f - (float)wzt[now] / 10, 0.9f + (float)wzt[now] / 10, 0.9f, 0);
+                snjs = 0;
+                bl++;
+            }
+
+        }
+    }
+    public void Huadown()
+    {
+        if(n1!=-1)
+        {
+            now = n1;
+        }
+    }
+    public void Hualeft()
+    {
+        if(zt==-1)
+        {
+            zt = 0;
+            now = 0;
+        }
+    }
+    public void Huaright()
+    {
+
+    }
+
+
+    public int getnextid()
+    {
+        int final = 1;
+                int minw=0;
+                for (int i2 = 0; i2 < words.Length; i2++)
+        {
+            
+                if (wzt[i2]<wzt[minw])
+                    {
+                        minw = i2;
+                    }
+            i2 = i2 + UnityEngine.Random.Range(-5, 20);
+            i2 = i2 % words.Length;
+            i2 = Mathf.Abs(i2);
+        }
+        final = minw;
+
+        for(int i=0;i<5;i++)
+        {
+            if (final == now|| final == n1 || final == n2 || final == n3)
+                final = (now + 1) % words.Length;
+        }
+        
+        n3 = n2;
+        n2 = n1;
+        n1 = now;
+
+        return final;
+    }
+
+    IEnumerator Getfy(string ow, int wid)
+    {
+        UnityWebRequest webRequest = UnityWebRequest.Get("http://dict.cn/" + ow);
+        yield return webRequest.SendWebRequest();
+
+        if (webRequest.isHttpError || webRequest.isNetworkError)
+        {
+            //UnityEngine.Debug.Log(webRequest.error);
+            anote.color = new Color(1, 0, 0);
+            anote.text = "网络未连接，或无法找到:" + ow;
+            words[wid] = "lucky";
+            fys[wid] = "幸运";
+            getok++;
+        }
+
+        else
+        {
+            string ret = webRequest.downloadHandler.text;
+            string bfr = webRequest.downloadHandler.text;
+            Regex myReg0 = new Regex("dict-basic-ul");
+            ret = myReg0.Replace(ret, ">midshang<");
+            Regex myReg02 = new Regex("padding-top: 25px;");
+            ret = myReg02.Replace(ret, ">midxia<");
+            Regex myReg = new Regex("<.*?>");
+            ret = myReg.Replace(ret, "");
+            Regex myReg2 = new Regex("\t|\n");
+            ret = myReg2.Replace(ret, "");
+            ret = "kkkt " + ret + " eeend";
+            Regex myReg3 = new Regex("kkkt.*?midshang");
+            ret = myReg3.Replace(ret, "");
+            Regex myReg4 = new Regex("midxia.*?eeend");
+            ret = myReg4.Replace(ret, "");
+            //string ft = ret;
+            //UnityEngine.Debug.Log(ret);
+            if (ret.Length > 200)
+            {
+                anote.text = "抱歉，出现罕见错误:" + ow;
+                words[wid] = "lucky";
+                fys[wid] = "幸运";
+            }
+            else
+            {
+                fys[wid] = ret.Trim();
+            }
+            getok++;
+
+        }
+
+
+    }
+
+    
+    
+
+
+}
+
+
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class inview : MonoBehaviour
+{
+    //public Camera mc=Camera.main;
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+       if(IsInView(transform.position))
+        {
+            gameObject.GetComponent<MeshRenderer>().enabled = false;
+        }
+       else
+        {
+            Camera.main.transform.position += new Vector3(0, 0, -1.5f);
+        }
+    }
+
+    public bool IsInView(Vector3 worldPos)
+    {
+        Transform camTransform = Camera.main.transform;
+        Vector2 viewPos = Camera.main.WorldToViewportPoint(worldPos);
+        Vector3 dir = (worldPos - camTransform.position).normalized;
+        float dot = Vector3.Dot(camTransform.forward, dir);     //判断物体是否在相机前面
+
+        if (dot > 0 && viewPos.x >= 0 && viewPos.x <= 1 && viewPos.y >= 0 && viewPos.y <= 1)
+            return true;
+        else
+            return false;
+    }
+
+}
+
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+public class kkt : MonoBehaviour
+{
+    public int zt;
+    public CanvasGroup c1;
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        if (zt == 1)
+        {
+            c1.blocksRaycasts = false;
+            if (c1.alpha > 0)
+                c1.alpha = c1.alpha - 0.05f;
+            else
+                SceneManager.LoadScene("mainkt");
+        }
+        else
+        {
+            if (c1.alpha <1)
+                c1.alpha = c1.alpha + 0.05f;
+        }
+    }
+    public void gotomainkt()
+    {
+        zt = 1;
+    }
+}
+
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+public class kt : MonoBehaviour
+{
+    public int zt;
+
+    public Text mt;
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    void FixedUpdate()
+    {
+        if(zt==1)
+        {
+            if (mt.color.a > 0)
+                mt.color = new Color(mt.color.r, mt.color.g, mt.color.b, mt.color.a - 0.05f);
+            else
+                SceneManager.LoadScene("czj");
+        }
+
+    }
+    public void startautosq()
+    {
+        zt = 1;
+    }
+}
+
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+public class rtyot2 : MonoBehaviour
+{
+    public ParticleSystem lizitext;
+    public RenderTexture rt;
+
+    //public string tt;
+    public Text ttit;
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        //ttit.text = tt;
+    }
+
+    void OnWillRenderObject()
+    {
+        //ttit.text = tt;
+    }
+
+
+    public void Rtlizi()
+    {
+        //ttit.text = tt;
+        
+            Texture texture = rt;
+            Texture2D texture2D = new Texture2D(texture.width, texture.height, TextureFormat.RGBA32, false);
+            //RenderTexture currentRT = RenderTexture.active;
+            RenderTexture renderTexture = RenderTexture.GetTemporary(texture.width, texture.height, 32);
+            Graphics.Blit(texture, renderTexture);
+
+            RenderTexture.active = renderTexture;
+            texture2D.ReadPixels(new Rect(0, 0, renderTexture.width, renderTexture.height), 0, 0);
+            texture2D.Apply();
+
+            ParticleSystem.ShapeModule sh;
+            sh = lizitext.shape;
+            sh.texture = texture2D;
+
+            if (lizitext.isPlaying == false)
+            {
+                lizitext.Play();
+            }
+            else
+            {
+                lizitext.Stop();
+                lizitext.Play();
+            }
+
+
+            //RenderTexture.active = currentRT;
+            RenderTexture.ReleaseTemporary(renderTexture);
+        
+    }
+
+    
+    }
+
+
+
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+public class usemagiccontrol : MonoBehaviour
+{
+    public float sx;
+    public float sy;
+    public float sz;
+    public float syl;
+    public float syc;
+
+
+    //public Text st;
+
+    public int js;
+
+    public int ztok;
+    public int zt;
+    public int ztjs;
+    public float lasttime;
+    public float lasttime2;
+    public float waitdanji;
+    public int snjs;
+
+    public int ci;
+
+    //public ParticleSystem t1;
+    //public ParticleSystem t2;
+    //public ParticleSystem t3;
+
+
+   // public Slider s1;
+
+    public Text fyt;
+    
+    //public GameObject ball;
+
+    //public Text safe;
+   // public Text min;
+    //public Text db;
+    // Start is called before the first frame update
+    void Start()
+    {
+       if(PlayerPrefs.GetFloat("mi")==0)
+        {
+            Destroy(this);
+        }
+    }
+
+    public void back()
+    {
+       // PlayerPrefs.SetFloat("mi",s1.value);
+       // SceneManager.LoadScene("mainkt");
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        sy = Input.acceleration.y;
+        syc = Mathf.Abs(sy - syl);
+        if (ztok == 1)
+        {
+            if (syc >0.002 && js < 0)
+            {
+                truepress();
+                js = 6;
+                //GameObject.Instantiate(ball, new Vector3(0, 4, 0), transform.rotation);
+            }
+        }
+        syl = sy;
+
+
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            //ci = 1;
+        }
+
+        }
+    void FixedUpdate()
+    {
+        //db.text = "syc" + syc.ToString() + "\n" + ztok.ToString();
+        if (syc> 0.009f)
+        {
+            zt++;
+        }
+        ztjs++;
+        if(ztjs%50==0)
+        {
+            if(zt>10)
+            {
+                ztok = 0;
+            }
+            else
+            {
+                ztok = 1;
+            }
+            zt = 0;
+        }
+        js--;
+
+
+        
+        if (ci==1)
+        {
+            ci = 0;
+
+
+            if ((Time.time - lasttime) < 0.3f)
+            {
+                Debug.Log("双击");
+                SendMessage("Shuangji");
+                //Shuangji();
+               // t1.Play();
+                //t3.Play();
+                waitdanji = 0;
+                js += 20;
+            }
+            else
+            {
+                waitdanji = 1;
+            }
+            lasttime = Time.time;
+
+        }
+    
+
+            if (waitdanji >= 1)
+            {
+                waitdanji += Time.deltaTime;
+            }
+            if (waitdanji > 1.3f)
+            {
+                Debug.Log("点击");
+            if(fyt.color.a>0.1f)
+            {
+                SendMessage("Huaup");
+            }
+            else
+            {
+                SendMessage("Danji");
+            }
+            //t2.Play();
+            //Danji();
+            js += 20;
+            waitdanji = 0;
+            }
+    }
+
+    public void truepress()
+    {
+        ci = 1;
+    }
+}
