@@ -50,11 +50,11 @@
             var scene = new BABYLON.Scene(engine);
         
             // Create a default skybox with an environment.
-            var hdrTexture = BABYLON.CubeTexture.CreateFromPrefilteredData("environment.dds", scene);
+            var hdrTexture = BABYLON.CubeTexture.CreateFromPrefilteredData("https://songbbgame.github.io/environment.dds", scene);
             var currentSkybox = scene.createDefaultSkybox(hdrTexture, true);
         
             // Append glTF model to scene.
-            BABYLON.SceneLoader.Append("http://songbbgame.github.io/", "hellowebgl7.glb", scene, function (scene) {
+            BABYLON.SceneLoader.Append("https://songbbgame.github.io/", "hellowebgl7.glb", scene, function (scene) {
                 // Create a default arc rotate camera and light.
                 scene.createDefaultCameraOrLight(true, true, true);
         
@@ -72,7 +72,7 @@
     var particleSystem = new BABYLON.ParticleSystem("particles", 2000, scene);
 
     //Texture of each particle
-    particleSystem.particleTexture = new BABYLON.Texture("flare.png", scene);
+    particleSystem.particleTexture = new BABYLON.Texture("https://songbbgame.github.io/flare.png", scene);
 
     // Where the particles come from
     particleSystem.emitter = fountain; // the starting object, the emitter
