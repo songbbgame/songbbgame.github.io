@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>bei-bl2threejs</title>
+    <style>
+html, body {
+  margin: 0;
+  height: 100%;
+}
+#c {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+    </style>
+  </head>
+  <body>
+<canvas id="c"></canvas>
+  
+  </body>
+
+  <script type="module">
+
+import * as THREE from 'https://threejsfundamentals.org/threejs/resources/threejs/r127/build/three.module.js';
+import {OrbitControls} from 'https://threejsfundamentals.org/threejs/resources/threejs/r127/examples/jsm/controls/OrbitControls.js';
+import {GLTFLoader} from 'https://threejsfundamentals.org/threejs/resources/threejs/r127/examples/jsm/loaders/GLTFLoader.js';
+
+function main() {
+  const canvas = document.querySelector('#c');
+  
+  
+  const renderer = new THREE.WebGLRenderer({canvas});
+  renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  
+  
+
+  const fov = 45;
+  const aspect = 2;  // the canvas default
+  const near = 0.1;
+  const far = 100;
+  const camera1 = new THREE.PerspectiveCamera(fov, aspect, near, far);
+  camera1.position.set(0, 10, 20);
+
+
+
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color('black');
+
+
+var blendercamera=new THREE.Object3D;
+
+var wbb = new THREE.Object3D;
+
+
+  {
+    const skyColor = 0xD1F0FF;  // light blue
+    const groundColor = 0x333333;  // brownish orange
+    const intensity = 1;
+    const light = new THREE.HemisphereLight(skyColor, groundColor, intensity);
+	
+    scene.add(light);
+	
+	
+	
+	
+	
+  }
+
+
+  {
+    const color = 0xFFFFFF;
+    const intensity = 2;
+    const light = new THREE.SpotLight( 0xffffff );
+    light.castShadow = true;
+	light.position.set(-8, 8, 8);
+    scene.add(light);
+    scene.add(light.target);
+	
+	
+	light.shadow.mapSize.width = 1024; // default
+light.shadow.mapSize.height = 1024;
+	
+	
+  }
+
+  {
+    const light = new THREE.PointLight( 0x28C6FF, 1, 100 );
+    scene.add(light);
+	light.position.set(1, 0.1, 0.2);
+  }
+
+  {
+    const light = new THREE.PointLight( 0x28C6FF, 1, 100 );
+    scene.add(light);
+	light.position.set(-1, 0.1, 0.2);
+  }
+  
+
+    const lightr = new THREE.PointLight( 0xFF5555, 1, 100 );
+    scene.add(lightr);
+	lightr.position.set(-1, 0.1, 0.2);
+
+
+
+var mixer;
+  {
+    const gltfLoader = new GLTFLoader();
+    gltfLoader.load('0.glb', (gltf1) => {
+      const root = gltf1.scene;
+      scene.add(root);
+	  
+	  blendercamera = root.getObjectByName('Camera');
+	  //blendercamera = root.children[ 0 ]
+	  wbb= root.getObjectByName('wb');
+	  
+	   const obj1 = root.getObjectByName('plane');
+	   obj1.castShadow = false;
+       obj1.receiveShadow = true;
+	   
+	   const sofa = root.getObjectByName('sofa');
+	   sofa.castShadow = true;
+       sofa.receiveShadow = true;
+	   
+	   const wb = root.getObjectByName('wb');
+	   wb.castShadow = true;
+       wb.receiveShadow = true;
+	   
+	   const wb1 = root.getObjectByName('wb1');
+	   wb1.castShadow = true;
+       wb1.receiveShadow = true;
+	   
+	   const wb2 = root.getObjectByName('wb2');
+	   wb2.castShadow = true;
+       wb2.receiveShadow = true;
+	   
+	   const wb3 = root.getObjectByName('wb3');
+	   wb3.castShadow = true;
+       wb3.receiveShadow = true;
+	   
+	   const wb4 = root.getObjectByName('wb4');
+	   wb4.castShadow = true;
+       wb4.receiveShadow = true;
+	   
+	   const wb5 = root.getObjectByName('wb5');
+	   wb5.castShadow = true;
+       wb5.receiveShadow = true;
+	   
+	   const wb6 = root.getObjectByName('wb6');
+	   wb6.castShadow = true;
+       wb6.receiveShadow = true;
+	   
+	   const wb7 = root.getObjectByName('wb7');
+	   wb7.castShadow = true;
+       wb7.receiveShadow = true;
+	   
+	   const wb8 = root.getObjectByName('wb8');
+	   wb8.castShadow = true;
+       wb8.receiveShadow = true;
+	   
+	   const wb9 = root.getObjectByName('wb9');
+	   wb9.castShadow = true;
+       wb9.receiveShadow = true;
+	   
+	   
+	   
+	   
+	  
+	  mixer = new THREE.AnimationMixer( root );
+	  
+	  for (var i=0;i<gltf1.animations.length;i++){
+                mixer.clipAction(gltf1.animations[i]).play();
+            }
+	  
+
+    });
+  }
+
+  function resizeRendererToDisplaySize(renderer) {
+    const canvas = renderer.domElement;
+    const width = canvas.clientWidth;
+    const height = canvas.clientHeight;
+    const needResize = canvas.width !== width || canvas.height !== height;
+    if (needResize) {
+      renderer.setSize(width, height, false);
+    }
+    return needResize;
+  }
+
+var clock = new THREE.Clock();
+
+  function render() {
+    if (resizeRendererToDisplaySize(renderer)) {
+      const canvas = renderer.domElement;
+      camera1.aspect = canvas.clientWidth / canvas.clientHeight;
+      camera1.updateProjectionMatrix();
+    }
+	
+	
+	var time = clock.getDelta();
+        if (mixer) {
+            mixer.update(time);
+        }
+
+//update
+
+var position = new THREE.Vector3();
+blendercamera.getWorldPosition( position );
+
+camera1.position.x = blendercamera.position.x;
+camera1.position.y = blendercamera.position.y;
+camera1.position.z = blendercamera.position.z;
+
+
+var position2 = new THREE.Vector3();
+wbb.getWorldPosition( position2 );
+
+lightr.position.x = wbb.position.x;
+lightr.position.y = wbb.position.y;
+
+
+if(lightr.position.z<90)
+{
+lightr.position.z = wbb.position.z;
+}
+
+
+
+
+
+    renderer.render(scene, camera1);
+
+    requestAnimationFrame(render);
+  }
+
+  requestAnimationFrame(render);
+}
+
+main();
+
+  </script>
+
+</html>
