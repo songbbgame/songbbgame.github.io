@@ -1,6 +1,6 @@
 {
-  "name": "DOR OFFICE",
-  "short_name": "DOR OFFICE",
+  "name": "SongBB Game办公室 Demo",
+  "short_name": "办公室 Demo",
   "start_url": "/",
   "scope": "/",
   "display": "fullscreen",

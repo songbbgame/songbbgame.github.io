@@ -4,18 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
   <meta name="theme-color" content="#05070a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SongBB Game办公室 Demo">
   <link rel="manifest" href="/manifest.webmanifest">
   <link rel="preload" href="/203songbbgame办公室-07-分支1碰撞.obj" as="fetch" crossorigin>
-  <title>DOR OFFICE</title>
-  <script type="module" crossorigin src="/assets/demo-n9_6mhw3.js"></script>
-  <link rel="modulepreload" crossorigin href="/assets/配置-C_riN8zR.js">
-  <link rel="stylesheet" crossorigin href="/assets/demo-Chudnr1t.css">
+  <title>SongBB Game办公室 Demo</title>
+  <script type="module" crossorigin src="/assets/demo-DHe-eHQC.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/配置-jthH7Iut.js">
+  <link rel="stylesheet" crossorigin href="/assets/demo-BI6E15B9.css">
 </head>
 <body>
   <canvas id="画布" tabindex="-1"></canvas>
   <div id="加载层">
     <div class="加载卡片">
-      <div class="标题">DOR OFFICE</div>
+      <div class="标题">SongBB Game办公室 Demo</div>
       <div id="加载文字">正在初始化渲染器</div>
       <div class="进度轨道"><div id="加载进度"></div></div>
       <div id="加载百分比">0%</div>
@@ -33,7 +36,6 @@
   <div id="触屏控制" hidden>
     <div id="移动摇杆" class="摇杆"><i></i></div>
     <div id="视角区域" aria-label="滑动控制视角"></div>
-    <button id="跳跃按钮" type="button" aria-label="跳跃"><svg viewBox="0 0 24 24"><path d="M6 14l6-6 6 6M12 8v10"/></svg></button>
     <div id="手机工具">
       <button id="全屏按钮" type="button" aria-label="全屏"><svg viewBox="0 0 24 24"><path d="M8 3H3v5M16 3h5v5M21 16v5h-5M8 21H3v-5"/></svg></button>
       <button id="设置按钮" type="button" aria-label="设置"><svg viewBox="0 0 24 24"><path d="M12 15.2a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4ZM19 12l2-1-2-3-2 .3-1.5-.9L15 5h-6l-.5 2.4-1.5.9L5 8l-2 3 2 1v1l-2 1 2 3 2-.3 1.5.9L9 20h6l.5-2.4 1.5-.9 2 .3 2-3-2-1v-1Z"/></svg></button>
@@ -41,10 +43,13 @@
     <section id="手机设置" hidden>
       <header><strong>设置</strong><button id="关闭设置" type="button" aria-label="关闭">×</button></header>
       <label>画质<select id="画质选项"><option>流畅</option><option selected>均衡</option><option>清晰</option></select></label>
+      <label>分辨率<select id="分辨率选项"></select></label>
       <div id="画质说明"></div>
       <label>移动速度<input id="移动速度" type="range" min="0.6" max="1.4" step="0.1" value="1"></label>
       <label>视角速度<input id="视角速度" type="range" min="0.6" max="1.8" step="0.1" value="1"></label>
+      <label>镜头<select id="镜头倍率"><option value="1">1×</option><option value="1.5">1.5×</option><option value="2">2×</option></select></label>
       <button id="设置全屏" type="button">进入全屏</button>
+      <div id="全屏说明" hidden>iPhone需添加到主屏幕后全屏</div>
     </section>
   </div>
   <aside id="开发面板" hidden>
