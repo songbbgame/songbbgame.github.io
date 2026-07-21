@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+  <meta name="theme-color" content="#05070a">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="preload" href="/办公室_LOD_600万_100万/lod-meta.json" as="fetch" crossorigin>
+  <link rel="preload" href="/203songbbgame办公室-07-分支1碰撞.obj" as="fetch" crossorigin>
+  <title>DOR OFFICE</title>
+  <script type="module" crossorigin src="/assets/demo-BxVuiAma.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/配置-BwifL9D_.js">
+  <link rel="stylesheet" crossorigin href="/assets/demo-DHSsIRnR.css">
+</head>
+<body>
+  <canvas id="画布" tabindex="-1"></canvas>
+  <div id="加载层">
+    <div class="加载卡片">
+      <div class="标题">DOR OFFICE</div>
+      <div id="加载文字">正在初始化渲染器</div>
+      <div class="进度轨道"><div id="加载进度"></div></div>
+      <div id="加载百分比">0%</div>
+    </div>
+  </div>
+  <div id="准星" hidden></div>
+  <div id="桌面提示" hidden>点击画面控制视角　WASD移动　Shift奔跑　空格跳跃　Esc释放鼠标</div>
+  <div id="横屏提示" hidden>
+    <div>
+      <strong>请横向握持手机</strong>
+      <span>横屏能获得更好的视野和操控空间</span>
+      <button id="进入横屏" type="button">进入横屏</button>
+    </div>
+  </div>
+  <div id="触屏控制" hidden>
+    <div id="移动摇杆" class="摇杆"><i></i></div>
+    <div id="视角区域" aria-label="滑动控制视角"></div>
+    <button id="跳跃按钮" type="button" aria-label="跳跃">跳</button>
+  </div>
+  <aside id="开发面板" hidden>
+    <h1>开发模式</h1>
+    <div id="开发状态"></div>
+    <label><input id="显示碰撞" type="checkbox" checked>显示碰撞模型</label>
+    <label>测试点位<select id="测试点位"></select></label>
+    <label>检查视角<input id="检查视角" value="0,0,0,0,0" aria-label="检查视角"></label>
+    <div class="开发按钮">
+      <button id="传送点位" type="button">传送</button>
+      <button id="回到出生" type="button">回到出生</button>
+      <button id="应用视角" type="button">应用检查视角</button>
+      <button id="复制视角" type="button">复制当前视角</button>
+    </div>
+    <a href="/" id="展示链接">打开展示模式</a>
+  </aside>
+</body>
+</html>

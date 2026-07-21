@@ -1,0 +1,10 @@
+{
+  "name": "DOR OFFICE",
+  "short_name": "DOR OFFICE",
+  "start_url": "/",
+  "scope": "/",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#05070a",
+  "theme_color": "#05070a"
+}
