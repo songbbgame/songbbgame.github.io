@@ -7,9 +7,9 @@
   <link rel="manifest" href="/manifest.webmanifest">
   <link rel="preload" href="/203songbbgame办公室-07-分支1碰撞.obj" as="fetch" crossorigin>
   <title>DOR OFFICE</title>
-  <script type="module" crossorigin src="/assets/demo-aOAs7adT.js"></script>
+  <script type="module" crossorigin src="/assets/demo-n9_6mhw3.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/配置-C_riN8zR.js">
-  <link rel="stylesheet" crossorigin href="/assets/demo-DHSsIRnR.css">
+  <link rel="stylesheet" crossorigin href="/assets/demo-Chudnr1t.css">
 </head>
 <body>
   <canvas id="画布" tabindex="-1"></canvas>
@@ -33,7 +33,19 @@
   <div id="触屏控制" hidden>
     <div id="移动摇杆" class="摇杆"><i></i></div>
     <div id="视角区域" aria-label="滑动控制视角"></div>
-    <button id="跳跃按钮" type="button" aria-label="跳跃">跳</button>
+    <button id="跳跃按钮" type="button" aria-label="跳跃"><svg viewBox="0 0 24 24"><path d="M6 14l6-6 6 6M12 8v10"/></svg></button>
+    <div id="手机工具">
+      <button id="全屏按钮" type="button" aria-label="全屏"><svg viewBox="0 0 24 24"><path d="M8 3H3v5M16 3h5v5M21 16v5h-5M8 21H3v-5"/></svg></button>
+      <button id="设置按钮" type="button" aria-label="设置"><svg viewBox="0 0 24 24"><path d="M12 15.2a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4ZM19 12l2-1-2-3-2 .3-1.5-.9L15 5h-6l-.5 2.4-1.5.9L5 8l-2 3 2 1v1l-2 1 2 3 2-.3 1.5.9L9 20h6l.5-2.4 1.5-.9 2 .3 2-3-2-1v-1Z"/></svg></button>
+    </div>
+    <section id="手机设置" hidden>
+      <header><strong>设置</strong><button id="关闭设置" type="button" aria-label="关闭">×</button></header>
+      <label>画质<select id="画质选项"><option>流畅</option><option selected>均衡</option><option>清晰</option></select></label>
+      <div id="画质说明"></div>
+      <label>移动速度<input id="移动速度" type="range" min="0.6" max="1.4" step="0.1" value="1"></label>
+      <label>视角速度<input id="视角速度" type="range" min="0.6" max="1.8" step="0.1" value="1"></label>
+      <button id="设置全屏" type="button">进入全屏</button>
+    </section>
   </div>
   <aside id="开发面板" hidden>
     <h1>开发模式</h1>
