@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><meta name="theme-color" content="#e9e6da"><title>DOR2 · 小车游乐场</title>  <script type="module" crossorigin src="./assets/index-1GAk5fVn.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-BYCS_sHB.css">
+</head>
+<body>
+<canvas id="game" aria-label="小车试验场"></canvas>
+<header><div class="brand"><i></i><div>DOR2 <span>FIELD LAB / 01</span></div></div><div class="header-actions"><button id="quality" title="画质">省电</button><button id="help" title="操作帮助">?</button><button id="pause" title="暂停">Ⅱ</button></div></header>
+<aside id="intro"><div class="eyebrow">一点好奇，四个轮子。</div><h1>今天，随便开。</h1><p>爬上坡顶，推走一只球。<br>试试这台会转头的小家伙。</p><button id="start">出发 <span>↗</span></button><small id="load">正在准备小车…</small></aside>
+<div id="hud" hidden><div id="region">慢慢来试车场</div><div id="hint">WASD 驾驶 · 拖动画面观察</div></div>
+<div id="crosshair" hidden>·</div><div id="toast" role="status"></div>
+<div id="drive" aria-label="驾驶摇杆"><div class="stick-ring"><div id="knob"></div></div><small>驾驶</small></div>
+<div id="look" aria-label="观察区域"><span>拖动观察</span></div>
+<nav id="actions" hidden>
+<button id="interact" class="primary"><b>夹取 / 放下</b><small>E</small></button>
+<button id="view"><b>第一人称</b><small>V</small></button>
+<button id="center"><b>看前方</b><small>C</small></button>
+<button id="light"><b>车灯</b><small>F</small></button>
+<button id="horn"><b>打招呼</b><small>H</small></button>
+<button id="reset"><b>回起点</b><small>R</small></button>
+</nav>
+<div id="toolbox" hidden><span>工具</span><button data-tool="0" class="selected">01 夹爪</button><button data-tool="1">02 磁吸</button><button data-tool="2">03 吸盘</button></div>
+<footer><span id="speed">0.0 <small>km/h</small></span><span id="status">R07 · READY</span><span id="perf"></span></footer>
+<dialog id="menu"><button id="close" class="close">×</button><div class="eyebrow">R07 / 操作手册</div><h2>看哪里，不一定开哪里。</h2><p>W / S 前后，A / D 转弯。拖动右侧或画面转动摄像头，C 回正。V 切换视角。</p><p>靠近球或箱子，E 夹住；再按一次放下。1 / 2 / 3 换工具，F 车灯，H 鸣笛，空格刹车，R 回起点。</p><p>手机横屏：左手驾驶，右手观察。点一下抓取即可保持，不必一直按住。</p><label>转向灵敏度 <input id="steering" type="range" min="0.6" max="1.6" step="0.1" value="1"></label><label><input id="smooth" type="checkbox" checked> 平滑视角切换</label><button id="fullscreen">全屏体验 ↗</button><button id="resume">继续驾驶</button><details><summary>实验信息</summary><p>1.5 m 桅杆相机 · 四轮悬挂 · 本地物理<br>不记录个人数据，不上传操作轨迹。<br>v0.1 · PlayCanvas / Cannon / Blender</p><pre id="debug"></pre></details></dialog>
+<div id="portrait"><div>↻</div><h2>横过来，世界宽一点。</h2><p>小车游乐场为横屏设计</p><button id="portrait-go">仍然进入</button></div>
+<div id="error" hidden role="alert"></div></body></html>

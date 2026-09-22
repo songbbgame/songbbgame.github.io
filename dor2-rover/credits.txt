@@ -1,0 +1,11 @@
+DOR2 小车游乐场 v0.1
+
+R07 model, playground geometry, interface and synthesized sounds were created for this experiment. No downloaded art, private reference documents or original DOR2 source assets are included.
+
+PlayCanvas Engine 2.22.1 — MIT License — Copyright PlayCanvas Ltd.
+https://github.com/playcanvas/engine
+
+cannon-es 0.20.0 — MIT License — Copyright Stefan Hedman and contributors.
+https://github.com/pmndrs/cannon-es
+
+See THIRD_PARTY_LICENSES.txt for complete dependency license notices.
