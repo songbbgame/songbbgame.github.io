@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>真实的梦2 像素版 V1.1</title>
+<title>真实的梦 2 · 第一章 · 可玩性修复 1.2</title>
 <style>
 /* DOR2 文字版：两种画面
    1 连接之前：一个2019年的旧网页（浅色、蓝链接、小字）
@@ -5283,7 +5283,7 @@ body.v11 #helpBtn, body.v11 #helpPanel { display: none !important; }   /* V1.1 �
   // 测试用：run 发一条指令并等它演完（返回 Promise）；setSpeed(0) 让所有等待立刻结束
   async function run(text) { if (busy) doSkip(); while (busy) await new Promise(r => setTimeout(r, 0)); hidePop(); add('me', esc(text)); await play(game.input(text)); }
   window.__dor = { get game() { return game; }, get busy() { return busy; }, send, run, popFor, skip: doSkip, drawActs, drawHud,
-    setSpeed(v) { pref.speed = v; }, setSound(v) { pref.sound = v; AU.setOn(v); if (!v) AU.stopAll(); }, begin: () => { store.del(SAVE); begin(null); }, load: (save) => { feed.innerHTML = ''; game = null; begin(save); }, say: (t) => add('sys', mark('· ' + t)),
+    setSpeed(v) { pref.speed = v; }, setSound(v) { pref.sound = v; AU.setOn(v); if (!v) AU.stopAll(); }, begin: () => { store.del(SAVE); begin(null); }, load: (save) => { feed.innerHTML = ''; game = null; finished = false; begin(save); }, say: (t) => add('sys', mark('· ' + t)),
     whistle: () => whistleRec(), get sound() { return pref.sound; }, get pref() { return pref; }, savePref, hidePop, nowISO };
 })();
 
@@ -5866,7 +5866,7 @@ body.v11 #helpBtn, body.v11 #helpPanel { display: none !important; }   /* V1.1 �
       // 文字版把我们挪到了别的位置（比如点了按钮“去窗边”）：自动开过去
       this.spot = s.spot;
       const here = this.spotAt(this.x, this.y);
-      if (here !== s.spot && s.spot) { const p = this.anchor(s.room, s.spot); this.auto = { x: p[0], y: p[1] }; }
+      if (here !== s.spot && s.spot) { const p = this.anchor(s.room, s.spot); this.x=p[0]; this.y=p[1]; this.auto=null; this._userTravel=false; this.nudgeFree(); }
     }
   };
   P.nudgeFree = function () {
@@ -5897,13 +5897,20 @@ body.v11 #helpBtn, body.v11 #helpPanel { display: none !important; }   /* V1.1 �
         if (Math.hypot(q[0] - p[0], q[1] - p[1]) > 0.2) this.a += angDiff(this.a, Math.atan2(q[1] - p[1], q[0] - p[0]) + (c.back ? Math.PI : 0)) * Math.min(1, dt * 5);
         this.x = p[0]; this.y = p[1]; this.pan = this.a; this.v = 0; dx = dy = 0; this.auto = null;
         this.focus = this.findFocus();
-    this.focusX = !this.focus && this.R().focusExtra ? this.R().focusExtra(s, this) : null;   // 不是文字版物体的“面前的东西”：{name, cmd} this.moveDl(dt); return;
+    this.focusX = !this.focus && this.R().focusExtra ? this.R().focusExtra(s, this) : null;   // 非文字物体的交互目标。
+        this.moveDl(dt); return;
       }
     }
     if (dx || dy) this.auto = null;
-    if (this.auto) {
-      const ex = this.auto.x - this.x, ey = this.auto.y - this.y, d = Math.hypot(ex, ey);
-      if (d < 4) this.auto = null; else { dx = ex / d; dy = ey / d; }
+    if (busy) { dx=dy=0; this.v=0; }
+    if (this.auto && !busy) {
+      if (!this.auto.points) { const goal=this.auto; this.navigate(goal.x,goal.y,{silent:true}); }
+      const nav=this.auto;
+      if (nav && nav.room===this.room) {
+        while(nav.i<nav.points.length && Math.hypot(nav.points[nav.i][0]-this.x,nav.points[nav.i][1]-this.y)<3)nav.i++;
+        if(nav.i>=nav.points.length)this.auto=null;
+        else { const p=nav.points[nav.i],ex=p[0]-this.x,ey=p[1]-this.y,d=Math.hypot(ex,ey); dx=ex/d;dy=ey/d; }
+      } else this.auto=null;
     }
     const want = dx || dy ? Math.atan2(dy, dx) : null;
     // 原地转向：先把车头转过去，再走（这台车是原地转向的）
@@ -5943,14 +5950,14 @@ body.v11 #helpBtn, body.v11 #helpPanel { display: none !important; }   /* V1.1 �
       if (!sent) {
         this.exitLock = null;
         const sp = this.spotAt(this.x, this.y);
-        if (sp && sp !== s.spot && !this.auto && !s.w.inBox && spotOK(s, this.room, sp)) {
+        if (sp && sp !== s.spot && !this.auto && !s.w.inBox && (dx || dy || this._userTravel) && spotOK(s, this.room, sp)) {
           const tr = G.DOR.C.rooms[this.room];
-          this.spot = sp; this.send('去' + tr.spots[sp].name, { quiet: true });
+          this._userTravel=false; this.spot = sp; this.send('去' + tr.spots[sp].name, { quiet: true });
         }
       }
     }
     // 房间自己盯着的动作（比如开过红门以后转过身去 = “转身”）
-    if (r0.watch && !busy && !this.pending && this.t - (this.watchT || 0) > 1.5) { const cmd = r0.watch(s, this); if (cmd) { this.watchT = this.t; this.send(cmd); } }
+    if (r0.watch && !busy && !this.pending && (dx || dy || this.v > 1) && !s.w.dlRunning && !s.w.ballFlying && this.t - (this.watchT || 0) > 1.5) { const cmd = r0.watch(s, this); if (cmd) { this.watchT = this.t; this.send(cmd); } }
     // 顶着一道关着的关卡往前开 = 文字版的“前进”（冷却一秒，别连发）
     if (r0.barriers && !busy && !this.pending && (dx || dy)) {
       for (const bq of r0.barriers) {
@@ -6265,7 +6272,8 @@ body.v11 #helpBtn, body.v11 #helpPanel { display: none !important; }   /* V1.1 �
     const r = PX.roomFor(sim.room);
     if (r !== this.camRoom) { this.camRoom = r; this.hk = 0; this.hintAt = null; }
     s.__t = t;
-    const hint = r.camHint ? r.camHint(s, sim, t) : null;
+    const hint = (sim.eng.busy() || s.look === 'up') && r.camHint ? r.camHint(s, sim, t) : null;
+    if (!sim.eng.busy() && s.look !== 'up') { this.hk=0; this.hintAt=null; }
     if (hint) this.hintAt = hint;
     this.hk = (this.hk || 0) + ((hint ? 1 : 0) - (this.hk || 0)) * Math.min(1, dtf * 1.8);
     if (this.hk < 0.002 && !hint) this.hk = 0;
@@ -7959,12 +7967,12 @@ body.v11 #helpBtn, body.v11 #helpPanel { display: none !important; }   /* V1.1 �
         switch (b.k) {
           case 'narr': this.say(b.text, 'narr'); break;
           case 'dl': this.say(b.text, 'dl'); break;
-          case 'sys': if (!hideSys(b.text)) toast(b.text.replace(/[〔〕〖〗]/g, '')); break;
+          case 'sys': if (!window.DOR12 && !hideSys(b.text)) toast(b.text.replace(/[〔〕〖〗]/g, '')); break;
           case 'pause': this.wait = Math.min(1.4, b.ms / 1000); break;
           case 'typing': this.typing = Math.min(1.6, (b.long ? b.ms : Math.min(b.ms, 2200)) / 1000); this.wait = this.typing; break;
           case 'title': showTitle(b.text); this.wait = 2.5; this.after = hideTitle; break;
           case 'black': document.body.classList.add('v11black'); this.wait = 1.2; break;
-          case 'connect': flash('noise', 0.9); this.wait = 0.9; break;
+          case 'connect': document.body.classList.remove('v11black'); flash('noise', 0.9); this.wait = 0.9; break;
           case 'disconnect': flash('noise', 0.8); toast('连接已断开'); this.wait = 1.6; break;
           case 'reel': this.reel = { b, t: 0, dur: window.PX.reelDur(b) }; break;
           case 'record': if (b.still) this.say(b.lines.filter(Boolean).join('\n'), 'narr'); else PANEL.show(b.lines.join('\n')); break;
@@ -8013,7 +8021,7 @@ body.v11 #helpBtn, body.v11 #helpPanel { display: none !important; }   /* V1.1 �
     },
   };
   // 文字版给玩家的操作提示：V1.1 用菜单和选项代替，不显示
-  function hideSys(t) { return /^附近：|视觉标注|操作：|也可以点|输入“|（〔|〕）|可以点下方|按回车|点击/.test(t); }
+  function hideSys(t) { return /^附近：|视觉标注/.test(t); }
 
   function render() {
     const box = $('#dlg'), c = DLG.cur;
@@ -8109,7 +8117,7 @@ body.v11 #helpBtn, body.v11 #helpPanel { display: none !important; }   /* V1.1 �
   HOOK.blocks = (bs, gm) => R.expect(bs, gm.s);
   HOOK.block = (b) => {
     // 网页阶段的东西（帖子、排队、设备列表）照旧由文字版界面演；其余交给对话框，文字版界面立即处理完
-    if (b.k === 'page' || b.k === 'queue' || (web() && b.k !== 'connect')) { D().setSpeed(/dev/.test(location.hash) ? 0 : 1); return; }   // 测试模式连网页动画也跳过
+    if (b.k === 'page' || b.k === 'queue' || (web() && b.k !== 'connect')) { D().setSpeed(0); return; }   // 测试模式连网页动画也跳过
     D().setSpeed(0);
     DLG.push(b); if (!DLG.cur && !DLG.wait) DLG.next();
   };
@@ -8141,12 +8149,13 @@ body.v11 #helpBtn, body.v11 #helpPanel { display: none !important; }   /* V1.1 �
     const prev = lastSpecial || new Set();
     const fresh = sp.filter(a => !prev.has(keyOf(a)));
     lastSpecial = new Set(sp.map(keyOf));
-    if (fresh.length && !MENU.open) MENU.show('', fresh.map(a => ({ label: a.label, fn: () => doAction(a) })).concat([{ label: '先不', fn: () => {}, cls: 'dim' }]), { where: 'dlg' });
+    // Choices are persistent, named buttons in the guide. Never open an unsolicited modal.
+    if (window.DOR12) window.DOR12.render(true);
   }
   function doAction(a) {
     if (a.whistle) return D().whistle();
     if (a.obj) return objMenu(a.obj);
-    if (a.fill) return V.ask('对dl说（它会在屏幕上看到）', v => send('说 ' + v));
+    if (a.fill) return V.ask(a.cmd.trim() === '写' ? '写在表格上的话' : '请输入', v => send(a.cmd + v));
     send(a.cmd);
   }
   function send(cmd) { if (eng.busy()) return; D().send(cmd); }
@@ -8177,10 +8186,7 @@ body.v11 #helpBtn, body.v11 #helpPanel { display: none !important; }   /* V1.1 �
     const places = acts.filter(a => a.g === '移动');
     if (places.length) add('去……', () => MENU.show('去哪', places.map(a => ({ label: a.label, fn: () => send(a.cmd) })).concat([{ label: '返回', fn: carMenu, cls: 'dim' }]), { cancel: carMenu }), 'sub');
     add('回看刚才的文字', () => PANEL.show(DLG.log.slice(-80).map(l => (l.kind === 'dl' ? '【dl】' : '') + l.text).join('\n\n')));
-    add('提示 / 卡住了', () => MENU.show('', [
-      { label: '现在能做什么', fn: () => V.toast(window.__help.hint()) },
-      { label: '跳过这一段', fn: async () => { if (!confirm('跳过这一段？会按标准路线替你做完这一段。')) return; V.toast(await skipSeg()); } },
-      { label: '返回', fn: carMenu, cls: 'dim' }], { cancel: carMenu }));
+    add('现在可以做什么', () => PANEL.show(window.DORGuide(gm.s).title + '\n\n' + window.DORGuide(gm.s).context));
     add('声音：' + (D().sound ? '开' : '关'), () => { const p = D().pref; p.sound = !p.sound; DOR.audio.setOn(p.sound); if (!p.sound) DOR.audio.stopAll(); D().savePref(); });
     add('关闭', () => {}, 'dim');
     MENU.show('R07', items.map(it => ({ label: it.label, fn: it.fn, cls: it.cls === 'sub' ? '' : it.cls, sub: it.cls === 'sub' })));
@@ -8189,6 +8195,7 @@ body.v11 #helpBtn, body.v11 #helpPanel { display: none !important; }   /* V1.1 �
 
   // ---------- A：面前的东西 ----------
   function aPress() {
+    if (window.DOR12 && (DLG.cur || DLG.wait > 0 || DLG.reel)) return window.DOR12.continue();
     if (MENU.asking) return;
     if (MENU.open) return MENU.pick();
     if (PANEL.open) return PANEL.close();
@@ -8197,7 +8204,7 @@ body.v11 #helpBtn, body.v11 #helpPanel { display: none !important; }   /* V1.1 �
     if (sim.focusX) return send(sim.focusX.cmd);
     if (sim.focus) return objMenu(sim.focus);
     const ex = sim.nearExit(40); if (ex) return sim.goExit(ex);
-    V.toast('面前没有东西。按 B 打开菜单。');
+    V.toast('点右侧／下方的动作按钮；也可以点画面里的物体。');
   }
   function bPress() {
     if (MENU.asking) return;
@@ -8257,7 +8264,7 @@ body.v11 #helpBtn, body.v11 #helpPanel { display: none !important; }   /* V1.1 �
   // ---------- 点画面 ----------
   cv.addEventListener('click', e => {
     if (MENU.open || PANEL.open || MENU.asking) return;
-    if (DLG.cur || DLG.reel) { DLG.a(); return; }
+    if (DLG.cur || DLG.reel || DLG.wait > 0) { if (window.DOR12) window.DOR12.continue(); else DLG.a(); return; }
     if (eng.busy()) return;
     const r = cv.getBoundingClientRect(), x = (e.clientX - r.left) / r.width * PX.W + R.camX, y = (e.clientY - r.top) / r.height * PX.H + R.camY;
     const rm = PX.roomFor(sim.room); const vis = new Set(DOR.visibleObjs(eng.s).map(o => o.id));
@@ -8268,21 +8275,23 @@ body.v11 #helpBtn, body.v11 #helpPanel { display: none !important; }   /* V1.1 �
     for (const p of rm.props) if (p.id && p.rect && vis.has(p.id) && hit(p.rect, 20)) return objMenu(p.id);
     if (sim.dl.vis && Math.hypot(x - sim.dl.x, y - sim.dl.y + 8) < 14 && vis.has('dl')) return objMenu('dl');
     const ex1 = exAt(22); if (ex1) return sim.goExit(ex1);
-    sim.auto = { x, y };
+    sim.navigate(x, y);
   });
 
   // ---------- 画面大小 ----------
   function layout() {
-    const W = window.innerWidth, H = window.innerHeight, portrait = H > W * 1.15;
-    document.body.classList.toggle('portrait', portrait);
-    const ctrlH = touch ? (portrait ? 176 : 0) : 0, dlgH = portrait ? 150 : 0;
-    const maxW = W, maxH = H - ctrlH - dlgH;
-    let sc = Math.min(maxW / PX.W, maxH / PX.H);
-    if (!touch && sc >= 2) sc = Math.floor(sc);
-    cv.style.width = Math.floor(PX.W * sc) + 'px'; cv.style.height = Math.floor(PX.H * sc) + 'px';
-    document.documentElement.style.setProperty('--cvw', Math.floor(PX.W * sc) + 'px');
-    document.documentElement.style.setProperty('--cvh', Math.floor(PX.H * sc) + 'px');
+    const stage = document.getElementById('stage');
+    const maxW = Math.max(240, stage ? stage.clientWidth - (innerWidth <= 850 ? 24 : 40) : innerWidth - 32);
+    const maxH = innerWidth <= 850 ? 400 : Math.max(240, innerHeight * .65);
+    const sc = Math.min(maxW / PX.W, maxH / PX.H);
+    const w = Math.floor(PX.W * sc), h = Math.floor(PX.H * sc);
+    cv.style.width = w + 'px'; cv.style.height = h + 'px';
+    document.documentElement.style.setProperty('--cvw',w+'px');
+    document.documentElement.style.setProperty('--cvh',h+'px');
   }
+  window.__px.ui = { send, doAction, objMenu, carMenu, aPress, bPress, layout,
+    reset() { ended = false; lastSpecial = null; sim.auto=null; sim.room=null; sim.pending=null; sim.carPath=null; R.fx={}; $('#end').classList.remove('on'); $('#bigTitle').classList.remove('on'); }
+  };
   window.addEventListener('resize', layout);
   new MutationObserver(layout).observe(document.body, { attributes: true, attributeFilter: ['class'] });
 
@@ -8323,11 +8332,11 @@ body.v11 #helpBtn, body.v11 #helpPanel { display: none !important; }   /* V1.1 �
       else if (free && sim.focus) { f.textContent = DOR.C.objs[sim.focus].names[0]; f.classList.add('on'); }
       else if (free && ex) { f.textContent = ({ l: '← ', r: '→ ', u: '↑ ', d: '↓ ' })[sim.exitDir(ex)] + ex.name; f.classList.add('on'); }
       else f.classList.remove('on');
-      $('#btnA').textContent = DLG.cur || DLG.reel ? '▼' : MENU.open ? 'A' : free && (sim.focus || sim.focusX) ? '看' : free && ex ? '进' : 'A';
+      $('#btnA').textContent = DLG.cur || DLG.reel || DLG.wait > 0 ? '继续' : MENU.open ? '确认' : free && (sim.focus || sim.focusX) ? '查看物体' : free && ex ? '进入' : '查看 / 操作';
     }
     requestAnimationFrame(frame);
   }
-  $('#end button').addEventListener('click', () => { try { localStorage.removeItem(HOOK.saveKey); } catch (e) {} location.reload(); });   // 重新开始：清掉存档
+  $('#end button').addEventListener('click', () => { if(window.DOR12) window.DOR12.restart(); });   // 重新开始：清掉存档
   layout();
   requestAnimationFrame(frame);
   // 测试和跳过：快速跑完以后，把堆起来的对话清掉
@@ -8448,6 +8457,360 @@ body.v11 #helpBtn, body.v11 #helpPanel { display: none !important; }   /* V1.1 �
       const m = h.match(/go=([a-z0-9]+)/); if (m) console.log('[dev]', await dev.goto(m[1]));
     });
   }
+})();
+
+</script>
+
+<style>
+/* Playability repair 1.2. All assets remain inline/offline. */
+body.v11{height:auto;min-height:100dvh;overflow:auto!important;background:#111416;color:#f2ecdd;font-size:16px;line-height:1.65}
+html{height:auto;min-height:100%;scroll-behavior:smooth}
+#play-shell{display:grid;grid-template-columns:minmax(0,1fr) 352px;max-width:1480px;margin:0 auto;min-height:100dvh;background:#15191b}
+#stage{min-width:0;position:relative;padding:20px}
+body.v11 #screen{position:relative;inset:auto;min-height:0;height:auto;display:flex;justify-content:flex-start;align-items:center;background:transparent;padding:0;touch-action:pan-y}
+body.v11.web #screen{display:none}
+body.v11 #view{max-width:100%;flex:none;border:1px solid #343c3b;box-shadow:0 12px 40px #0006;border-radius:8px;overflow:hidden;background:#000}
+body.v11 #view canvas{max-width:100%;cursor:crosshair}
+#scene-heading{margin:0 0 12px;display:flex;justify-content:space-between;gap:12px;align-items:center;font-size:14px;color:#bfc9c4}
+#scene-heading b{font-size:17px;color:#eee}
+#scene-heading small{color:#96a29a}
+body.v11 #dlg,body.v11.portrait #dlg{position:relative;inset:auto;transform:none;width:100%;max-width:100%;min-height:130px;margin:18px 0 10px;padding:22px 20px 42px;border:1px solid #687461;border-radius:8px;box-shadow:none;font-size:18px;line-height:1.8;visibility:visible;display:none;background:#202827;color:#f2ecdd;letter-spacing:0;cursor:pointer}
+body.v11 #dlg.on,body.v11.portrait #dlg.on{display:block}
+#dlg .name{top:-12px;left:14px;border:1px solid #7fe0a0;border-radius:4px;font-size:12px}
+body.v11 #dlg.dl #dlgText{font-family:var(--font);letter-spacing:0}
+#dlgMore{bottom:10px;right:16px;animation:none;color:#bfe0ca;font-size:13px}
+#reading-controls{display:flex;width:100%;gap:8px;align-items:center;margin:4px 0 10px}
+#reading-controls button{flex:1;min-height:46px;border:1px solid #5f775d;border-radius:7px;background:#c5e7b0;color:#172313;font-weight:600;cursor:pointer}
+#reading-controls button.secondary{flex:0 0 auto;background:transparent;color:#b7c6be;padding:8px 14px;font-weight:400;border-color:#48534e}
+#reading-controls[hidden]{display:none}
+#control-note{font-size:12px;color:#99a59e;width:100%;margin-top:12px;text-align:center}
+body.v11 #keys{display:none!important}
+body.v11 #touch,body.v11.touch #touch{display:none;position:relative;inset:auto;width:100%;height:112px;padding:4px 8px;margin-top:8px;align-items:center}
+body.v11.touch.drive-mode #touch{display:flex}
+#stick{width:94px;height:94px}
+#ab #btnA{width:100px;height:48px;border-radius:8px;font-size:16px;margin:0;box-shadow:none}
+#ab #btnB{width:76px;height:48px;border-radius:8px;font-size:15px;box-shadow:none}
+#ab{gap:8px}
+#guide{position:sticky;top:0;align-self:start;min-width:0;max-height:100dvh;overflow-y:auto;padding:26px 22px;border-left:1px solid #354039;background:#1b211e}
+#guide .eyebrow{font-size:11px;letter-spacing:.16em;color:#abc09f;margin-bottom:14px}
+#guide h1{font-size:24px;line-height:1.45;margin:0 0 12px;font-weight:650;color:#f2f1e6}
+#guide-context{font-size:15px;line-height:1.8;color:#c3cec4;margin:0 0 18px}
+#guide-actions{display:grid;gap:9px}
+#guide button{font:inherit;cursor:pointer;touch-action:manipulation}
+#guide-actions button{min-height:50px;padding:12px 14px;line-height:1.5;text-align:left;background:#bce29e;color:#1b2b17;border:1px solid #c7eba8;border-radius:8px;font-weight:650}
+#guide-actions button+button{background:#28342c;color:#d2e8c5;border-color:#536b4b;font-weight:500}
+#guide-actions button:hover{filter:brightness(1.08)}
+#guide button:disabled{opacity:.5;cursor:default}
+#guide button:focus-visible,#reading-controls button:focus-visible,#menu button:focus-visible{outline:3px solid #fae3a1;outline-offset:3px}
+#guide-explore{margin-top:22px;border-top:1px solid #354239;padding-top:16px}
+#guide-explore summary{cursor:pointer;color:#d2decf;font-size:14px;min-height:36px;list-style-position:inside}
+#guide-explore .row-label{font-size:11px;color:#9eac9e;letter-spacing:.08em;margin:12px 0 8px}
+#explore-actions{display:flex;flex-wrap:wrap;gap:7px}
+#explore-actions button{border:1px solid #465547;background:#252e27;color:#d8e2d4;border-radius:6px;padding:8px 10px;min-height:44px;font-size:13px;line-height:1.5;text-align:left;flex-grow:1}
+#explore-actions button.obj{border-style:dashed}
+#tool-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:18px;padding-top:16px;border-top:1px solid #354239}
+#tool-actions button{min-height:44px;border:1px solid #3a493f;border-radius:6px;background:transparent;color:#bac8b9;font-size:12px;padding:8px}
+#session-status{font-size:11px;color:#92a28f;margin-top:16px;line-height:1.65}
+#save-message{font-size:12px;color:#d8c994;margin:10px 0 0;min-height:20px}
+#visual-tags{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.visual-tag{position:absolute;transform:translate(-50%,-100%);font-size:11px;line-height:1.3;white-space:nowrap;background:#111a17db;color:#f5eed8;border:1px solid #c4d9a077;padding:3px 6px;border-radius:4px}
+.visual-tag.self{border-color:#efcf72;color:#ffdb7b}
+.visual-tag.dl{border-color:#8fdab0;color:#c5f6d9}
+#focus{top:8px;max-width:92%;overflow:hidden;text-overflow:ellipsis;z-index:2}
+#toast{z-index:3;top:auto;bottom:12px}
+body.v11 #menu,body.v11.portrait #menu,body.v11 #menu.center,body.v11 #menu.dlg,body.v11.portrait.touch #menu{position:fixed;left:50%;right:auto;top:50%;bottom:auto;transform:translate(-50%,-50%);width:min(90vw,480px);max-width:90vw;max-height:76dvh;border:1px solid #a4bd98;border-radius:9px;padding:12px;z-index:80;box-shadow:0 0 0 100vmax #0009,0 12px 50px #000a;background:#1e2722;display:none}
+body.v11 #menu.on,body.v11.portrait #menu.on{display:block}
+#menu .h{font-size:15px;padding:8px 10px 12px;color:#d5e6ca}
+#menu button{min-height:46px;border-radius:5px;font-size:15px;padding:10px 12px 10px 28px;line-height:1.6}
+#menu button:hover,#menu button.sel{background:#344335}
+body.v11 #panel,body.v11.portrait #panel,body.v11.portrait.touch #panel{position:fixed;left:50%;right:auto;top:50%;bottom:auto;transform:translate(-50%,-50%);width:min(92vw,720px);height:min(80dvh,720px);z-index:80;box-shadow:0 0 0 100vmax #000a;border-width:1px;border-radius:9px;overflow:hidden}
+body.v11 #ask{position:fixed;z-index:90;top:45%;border-width:1px;border-radius:9px;box-shadow:0 0 0 100vmax #000a}
+#ask input{min-width:0;width:0}#ask button{min-height:44px}
+body.v11 #end{position:fixed;z-index:95;padding:28px;text-align:center;font-size:22px}
+#start{z-index:100;background:radial-gradient(ellipse at 50% 32%,#30422f 0,#111714 68%);gap:20px}
+#start h1{font-size:35px;font-weight:600;letter-spacing:.1em}
+#start p{color:#bbcab4;font-size:16px;line-height:1.9;max-width:480px}
+#start button{min-height:50px;background:#c2e39f;color:#192817;border:0;font-weight:600}
+body.v11 #browser{min-height:0;border-radius:8px;overflow:hidden;max-height:calc(100dvh - 100px);overflow-y:auto;font-size:14px}
+body.v11 #page{padding-bottom:24px}
+body.v11 #chrome{position:sticky}
+@media(max-width:850px){
+ #play-shell{display:block;max-width:720px}
+ #stage{padding:12px 12px 0}
+ #scene-heading{font-size:12px;margin-bottom:8px}#scene-heading b{font-size:15px}
+ #guide{position:relative;top:auto;max-height:none;border-left:0;border-top:1px solid #354039;padding:20px 16px 24px}
+ #guide .eyebrow{margin-bottom:8px}
+ #guide.is-reading .eyebrow,#guide.is-reading h1,#guide.is-reading #guide-context,#guide.is-reading #guide-actions{display:none}
+ #guide.is-reading{padding-top:14px}#guide.is-reading #tool-actions{margin-top:0;padding-top:0;border:0}
+ #guide h1{font-size:21px;margin-bottom:8px}
+ #guide-context{font-size:14px;line-height:1.7;margin-bottom:14px}
+ body.v11 #dlg,body.v11.portrait #dlg{font-size:16px;padding:18px 15px 38px;min-height:108px;margin-top:16px}
+ body.v11 #browser{max-height:42dvh}
+ #guide-explore{margin-top:16px;padding-top:12px}
+ #guide-actions{grid-template-columns:1fr}#guide-actions button{min-height:48px;padding:11px 13px}
+ #tool-actions{grid-template-columns:repeat(3,1fr)}
+ #control-note{margin:6px 0 10px;font-size:11px}
+ .visual-tag{font-size:10px;padding:2px 4px}
+ #start h1{font-size:29px}#start p{font-size:15px}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+</style>
+
+<script>
+/* DOR2 1.2: state-derived, non-destructive guidance. No canned route replay. */
+(function(G){'use strict';
+const act=(label,cmd)=>({label,cmd});
+function guide(s){
+ if(!s)return {title:'第一章 · 重新连接',context:'一条七年前的参观链接，现在还通向哪里？',actions:[]};
+ const f=s.f,w=s.w,n=s.n,at=s.spot;const A=(title,context,...actions)=>({title,context,actions});
+ if(s.ended)return A('第一章结束','这次连接已经结束。你的选择保留在本次记录中。');
+ if(s.phase==='web'){
+  if(w.page==='admin')return A('找到还在线的访客车','R07 是你可以控制的访客车。D02 是维护设备，不是另一个可选主角。',act('连接访客车 R07','连接07'));
+  if(w.page==='nocar')return A('普通入口没有分配到车辆','不是让你真的排队。打开页面下方的设备入口，检查是否还有可连接的车。',act('查看设备入口','管理员入口'));
+  if(w.page==='visit')return A('填写访客称呼，建立连接','称呼只用于本次故事。影像记录是游戏内的虚构记录，不调用你的摄像头。',s.name?act('连接','连接'):{label:'填写称呼',cmd:'名字 ',fill:true,prompt:'这次参观怎么称呼你？'});
+  return A('一条 2019 年的旧链接','你在浏览一则旧帖子。评论不是操作教程；直接打开远程参观入口，就能开始第一章。',act('打开远程参观','远程参观'));
+ }
+ if(s.phase==='office1')return A('连接成功 · 先试着移动','你控制的是远处的摄像头，不是正在播放的广告。后退一点，看看画面的边缘。',act(w.ad?'再后退一点':'后退，离开屏幕','后退'));
+ if(s.phase==='office')return s.room==='corridor'?A('走廊 · 声音从前方传来','车已经离开办公室。沿走廊往前，是一间没有开灯的房间。',act('沿走廊前进','前进')):A('办公室 · 你是一辆访客车','电视里的广告已经结束。黑屏上的倒影是你控制的 R07；你可以开车，也可以用下方的地点按钮移动。',act('去走廊，寻找声音','去走廊'));
+ if(s.phase==='dark'){
+  if(w.darkLit){
+   if(f.tourOn)return A('dl 发出了参观邀请','维护机器人会带路。想检查房间也可以，准备好后再出发。',act('跟着 dl 开始参观','跟着dl'));
+   if(s.mast==='down')return A('灯亮了 · 回到正常视角','电池已经回到充电架。先把摄像头升起来。',act('升起摄像头','升杆'));
+   return A('房间亮了','不用再找电池。dl 还在你身边，留意它的小屏幕。',act('看看 dl 接下来做什么','等'));
+  }
+  if(!f.dlDropped){
+   if(!s.light)return A('黑房间 · 先照亮眼前','这里不是黑屏故障。R07 有自己的车灯。',act('打开车灯','开灯'));
+   if((w.snd||0)<2)return A('听声音，找它的位置','声音在黑暗里移动。转动镜头，不需要在黑屏里乱撞。',act(w.snd?'向另一边看看':'向左看看',w.snd?'右转':'左转'));
+   return A('声音在上方','地面的灯照不到那里，试着抬起镜头。',act('抬头看轨道','抬头'));
+  }
+  if(f.blind)return A('镜头被遮住了 · 先倒出来','你仍在充电架下面。按“后退”沿原路挪动；黑屏不代表死机。',act('慢慢后退','后退'));
+  if(f.batteryRolled&&!f.gotBattery){
+   if(s.mast!=='down')return A('电池滚进架子下面','高高的摄像头过不去。先收杆，再开进去。',act('收起摄像头杆','收杆'));
+   if(at!=='under')return A('取回电池','摄像头已经降下来了，可以从充电架底下钻进去。',act('开到充电架下面','去充电架下面'));
+   return A('电池就在眼前','用机械臂的夹爪取电池。',act('夹住电池','夹电池'));
+  }
+  if(s.dl.task==='battery')return at!=='rack'?A('dl 在充电架前忙碌','你可以开近一点，看看它为什么够不到触点。',act('开到充电架前','去充电架前')):A('它需要同时按住盖板、放入电池','这里可以帮忙，也可以不插手。两个选项都会继续故事。',act('帮它按住盖板','帮它按住盖板'),act('先让它自己试试','等'));
+  return A('第一次见到维护机器人','它不是敌人，正在收拾刚刚倒下的箱子。你可以等它做完，也能在附近看看。',act('看它把箱子收好','等'));
+ }
+ if(s.phase==='tour1'){
+  if(!f.hasTablet)return A('办公室 · 两个时间的对照','dl 递来一块平板，接过来就能看它要展示的内容。',act('接过平板','接平板'));
+  if(!n.raise)return A('举起平板','平板里的画面与眼前的房间可以重叠。它不是背包里的一条说明。',act('举起平板看看','举起平板'));
+  if(!f.photoFound)return A('沿着过去的办公室看一看','举着平板走到窗边，比较屏幕里的 2019 年和现在。',act('举着平板去窗边','去窗边'));
+  if(w.tablet)return A('同一间办公室，隔了七年','你已经看到了窗边的变化。放下平板，再看现在的房间。',act('放下平板','放下平板'));
+  return A('办公室 · 准备去下一站','海报墙和工位上的旧东西可以自由看，不需要全部搜完才能继续。',act('跟着 dl 去天井','跟着dl'),act('先看看海报墙','去海报墙'));
+ }
+ if(s.phase==='atrium'){
+  if(w.inBox)return A('你在纸箱里','这不是卡住了。可以感受一下它怎么推你，也可以立刻出来。',act('先让它推一会儿','等'),act('倒出纸箱','出来'));
+  if(!f.chain1)return A('玩具天井 · 先看看这里','高墙之间摆着灯、玩具和一套连锁装置。这里可以乱玩，不是找唯一密码。',act('看 dl 示范连锁装置','等'));
+  if(!f.shadowBig&&!f.roofOpen){
+   if(at!=='console')return A('玩具天井 · 试试灯和影子','连锁装置在第七环停了。先去旁边的灯台，那里可以亲手改变整个房间。',act('去灯台','去灯台'),act('先研究卡住的装置','去连锁装置'));
+   if(!f.shadowOn)return A('灯台 · 你按什么，房间就变什么','颜色按钮可以随便玩。投影灯能把近处的东西投到高墙上。',act('摆动投影灯','摆投影灯'),act('按黄色灯','按黄色'),act('按蓝色灯','按蓝色'));
+   return A('调一下影子的大小','投影灯已经亮了。挪动它，再看墙上的变化。',act('再调一下投影灯','摆投影灯'));
+  }
+  if(!f.roofOpen){
+   if(!f.chainFixed&&at!=='chain')return A('靠近卡住的第七环','翻板在连锁装置旁边，先开过去才能碰到它。',act('开到连锁装置旁','去连锁装置'));
+   if(!f.chainFixed)return A('第七环卡住了','刚才停下的是歪掉的翻板。你可以把它扶正，再让 dl 重试。',act('扶正第七环翻板','扶翻板'));
+   return A('再运行一次连锁装置','翻板已经正了。跟着球，看这一次能走到哪里。',act('请 dl 再试一次','跟着dl'));
+  }
+  if(!f.dlLights)return A('顶打开了，雨落进天井','刚才的机关把顶打开了。先看一眼雨里的灯和 dl，不用马上找出口。',act('看看雨中的 dl','等'));
+  return A('玩具天井 · 留下你自己的玩法','雨里的玩具仍然能玩。可以继续试灯、小火车和纸箱，也可以与 dl 去下一站。',act('跟着 dl 去下一站','跟着dl'),act('再去灯台玩一会儿','去灯台'));
+ }
+ if(s.phase==='horror'){
+  if(s.room==='staff')return A('员工通道 · 你选了不吓人的路线','你看到的是道具背面。dl 跟着你，这条路也能完整走到下一站。',act('沿员工通道往前','前进'));
+  const seg=w.seg||0;
+  if(seg===0)return A('入口 · 由你选路线','恐怖区有黑暗和惊吓；员工通道没有。不是选错就重来，两条路都能继续第一章。',act('走恐怖区（有惊吓）','前进'),act('走员工通道（不吓人）','去员工通道'));
+  if(seg===4){
+   if(w.hide===1)return A('黑暗中的躲猫猫','dl 躲了起来。关掉自己的车灯，再往前挪一点。',act('关掉车灯','关灯'));
+   if(w.hide===2)return A('车灯关了 · 你仍然能移动','现在可以轻轻向前开，不需要猜键盘口令。',act('摸黑往前挪','前进'));
+   if(w.hide===3)return A('你已经靠近了','试着突然把车灯打开。',act('突然开灯','开灯'));
+   if(w.hide===35)return A('这次是你吓到了它','先看看刚才的动静有没有结束。',act('停下来听一听','等'));
+  }
+  if(seg===5&&f.gapBlind&&!f.gapShared&&!f.gapDone)return A('夹层里看不见路','镜头被挡住，不用盲目撞墙。告诉 dl 看不见，再按它提供的视角往前走。',act('告诉 dl：我看不见','说 看不见'));
+  if(seg===6&&!w.redOpen)return A('红门 · 门没有锁','已经到了门前，用车头轻轻顶开。',act('推开红门','推红门'));
+  if(seg===6&&w.redOpen&&!f.sawStrawberry)return A('你已经穿过门了','门停在身后。回头看看它的另一面，或者继续走。',act('回头看门的背面','转身'),act('直接走向出口','前进'));
+  return A(seg===7?'出口 · 前面恢复了普通照明':'恐怖区 · 沿通道继续',seg===7?'你们已经走出恐怖区。墙上的内测表可以看，下一站在前面。':f.gapShared?'dl 提供了另一个视角。沿通道前进，直到从夹层里出来。':'这里按一段一段的路前进。每次推进后先看完反馈，不需要反复猜出口。',act(seg===7?'去小花园':'沿通道前进','前进'));
+ }
+ if(s.phase==='garden'){
+  if(f.tourEnded)return A('正式导览结束了','dl 收起了导览界面，准备回去。接下来不是“清完所有任务”，你可以选择继续陪它走。',act('跟它一起回去','跟着dl'));
+  if(!f.pipeFixed)return at!=='trough'?A('小花园 · 高墙下的一点天光','这是室内长走廊深处的小花园。水槽旁的一根支管不出水，可以靠近看看。',act('去水槽边','去水槽边')):A('水槽 · 支管里卡着钢珠','这里可以帮忙疏通，也可以停着看看植物。',act('用磁铁吸出钢珠','用磁铁吸钢珠'),act('在花园里待一会儿','等'));
+  return A('水开始流了','没有必须搜集的道具。可以留一句自己的话，也可以静静看它收拾。',act('再在这里待一会儿','等'),{label:'在浇水表上留言',cmd:'写 ',fill:true,prompt:'写在表格上的话（最多 24 字）'});
+ }
+ if(s.phase==='detour')return f.detourOpen?A('回程 · 从侧门绕一下','维修车把门撑开了。跟 dl 从建筑外侧绕到另一边。',act('走被撑开的侧门','去外面那扇门')):A('回程通道被维修车堵住','这不是碰撞故障。dl 正在判断怎么过去。',act((n.pass||0)>=2?'停下，等维修车':'试着从旁边通过',(n.pass||0)>=2?'等':'前进'));
+ if(s.phase==='desert'){
+  if(s.room==='service')return A('建筑外侧 · 前面有个转角','dl 在你后面。你可以自己先开过去。',act('转过前面的拐角','前进'));
+  if(w.ballFlying)return A('球从车斗里弹出去了','要不要追由你决定。不要等计时，也不需要抢按键。',act('去追黄色球','追球'),act('停下来，看它滚远','等'));
+  if(w.dlRunning&&!w.chased)return A('dl 冲下了沙坡','现在是你的选择：跟它一起冲，或者留在高处看它。阅读这段说明不会让选择超时。',act('一起冲下去','追'),act('我留在高处看它','等'));
+  if(!f.dlRan)return A('墙外 · 没有安排好的导览了','眼前是建筑外面真实的沙漠。这里没有规定你必须感叹什么，先做一件自己想做的事。',act('往沙坡边挪一点','前进'),act('停下看看远处','环顾'));
+  if(w.chased==='no'&&!f.towers&&at!=='box')return A('沙漠 · dl 爬回来了','你没有跟着冲下去。现在还能一起探索，或直接往员工门走。',act('去看看闪灯的测试盒','去测试盒'),act('往员工门走','去员工门'));
+  if(!f.towers)return at!=='box'?A('沙漠 · 自由探索','坡下有一个闪灯的旧测试盒；回去的员工门在建筑另一侧。',act('去看看测试盒','去测试盒'),act('向员工门走','去员工门')):A('测试盒 · 一个仍通着电的按钮','它就在车旁。按一下看看，也可以不碰。',act('按下测试盒按钮','按测试盒'),act('不碰它，去员工门','去员工门'));
+  if(at!=='door2'||!w.crossingDone)return A('沙漠 · 回建筑的路','还可以继续看远处的灯。准备回去时，往建筑另一侧的员工门走。',act('向员工门走','去员工门'),act('先停下来看看','环顾'));
+  return A('员工门就在面前','这扇灰色的门通回建筑内部。也可以再留一会儿。',act('开进员工门','进去'),act('和 dl 按一下喇叭','嘟'));
+ }
+ if(s.phase==='home'){
+  if(s.room==='staffdoor')return A('回程 · 路过刚才去过的地方','从员工通道回办公室，能看到今天留下的变化。',act(at==='end'?'回到办公室':'沿通道往前',at==='end'?'去办公室':'前进'));
+  if(s.room==='office')return A('回到办公室','电视还是那台电视。可以在海报墙前拍张照，再和 dl 回充电架。',act('和 dl 回去充电','跟着dl'),act(at==='wall'?'在合照墙前拍照':'去海报墙',at==='wall'?'拍':'去海报墙'));
+  if(s.room==='corridor')return A('走廊 · 回充电架','dl 就在前面。',act('跟着 dl 回房间','跟着dl'));
+  if(!w.docked)return A('两格相邻的充电位','dl 看向它旁边的空位。把车倒进去就能充电，不用对准一个像素。',act('停进 dl 旁边，充电','充电'));
+  if(!w.stayAsked)return A('充电中 · 可以陪它待一会儿','车轮锁定是因为正在充电。接下来不是继续开车。',act('再陪它待一会儿','等'));
+  return A('今天的连接可以结束了','你可以再待一会儿。选择断开后，故事会来到第二天，不是关闭网页或删除存档。',act('断开连接，第二天再来','断开'),act('再待一会儿','等'));
+ }
+ if(s.phase==='day2'){
+  if((w.rec||0)===0)return A('第二天 · 恢复连接','充电架旁有可查看的记录。先看看它们，而不是继续昨天的导览。',act('打开维护记录','看记录'));
+  if(w.rec===1)return A('这些是以前的记录','你可以按自己的速度看。往后翻，找到昨天。',act('翻到昨天的记录','往后滑'));
+  if(w.rec===2)return A('昨天，你也出现在记录里','记录会包含这次游玩中实际发生的事。再往后看。',act('继续往后翻','往后滑'));
+  return A('看过记录以后','剩下的记录可以继续查。准备结束时，断开本次连接。',act('结束第一章','断开'),act('查看出站记录','出站记录'));
+ }
+ return A('继续探索','可以查看当前场景的地点与物体。',act('看看周围','环顾'));
+}
+G.DORGuide=guide;
+})(typeof globalThis!=='undefined'?globalThis:this);
+
+</script>
+
+<script>
+/* Collision-aware click navigation. Uses the renderer's own collision geometry. */
+(function(G){'use strict';const P=G.PX.Sim.prototype;
+P.nudgeFree=function(){if(!this.solidAt(this.x,this.y,9))return;const x=this.x,y=this.y,r=this.R();let best=null,bd=Infinity;for(let py=10;py<r.h-9;py+=4)for(let px=10;px<r.w-9;px+=4){let d=(x-px)**2+(y-py)**2;if(d<bd&&!this.solidAt(px,py,9)){best=[px,py];bd=d;}}if(best){this.x=best[0];this.y=best[1];}};
+P.navigate=function(tx,ty,opt){
+ opt=opt||{};this._userTravel=!opt.silent;this.nudgeFree();const step=4,r=this.R(),nx=Math.ceil(r.w/step),ny=Math.ceil(r.h/step),total=nx*ny;
+ const pass=new Int8Array(total),prev=new Int32Array(total);prev.fill(-2);const queue=new Int32Array(total);
+ const point=i=>[(i%nx)*step+2,Math.floor(i/nx)*step+2];
+ const free=i=>{if(pass[i])return pass[i]===1;let p=point(i);pass[i]=this.solidAt(p[0],p[1],9)?-1:1;return pass[i]===1;};
+ let start=-1,bd=Infinity;for(let y=Math.max(0,Math.floor(this.y/step)-4);y<Math.min(ny,Math.floor(this.y/step)+5);y++)for(let x=Math.max(0,Math.floor(this.x/step)-4);x<Math.min(nx,Math.floor(this.x/step)+5);x++){let i=y*nx+x,p=point(i),d=(p[0]-this.x)**2+(p[1]-this.y)**2;if(d<bd&&free(i)){start=i;bd=d;}}
+ if(start<0){this.auto=null;G.V11.toast('这个位置暂时无法开车。可以直接使用地点按钮。');return false;}
+ let head=0,tail=0,best=start,bestD=Infinity;queue[tail++]=start;prev[start]=-1;
+ while(head<tail){let i=queue[head++],p=point(i),d=(p[0]-tx)**2+(p[1]-ty)**2;if(d<bestD){best=i;bestD=d;}if(d<4)break;let x=i%nx,y=Math.floor(i/nx);for(const j of [x>0?i-1:-1,x+1<nx?i+1:-1,y>0?i-nx:-1,y+1<ny?i+nx:-1])if(j>=0&&prev[j]===-2&&free(j)){prev[j]=i;queue[tail++]=j;}}
+ let route=[];for(let i=best;i>=0;i=prev[i])route.push(point(i));route.reverse();
+ const clear=(a,b)=>{let len=Math.hypot(b[0]-a[0],b[1]-a[1]),n=Math.ceil(len/2);for(let i=0;i<=n;i++){let k=n?i/n:0;if(this.solidAt(a[0]+(b[0]-a[0])*k,a[1]+(b[1]-a[1])*k,9))return false;}return true;};
+ let points=[],a=[this.x,this.y],i=0;while(i<route.length){let j=i;while(j+1<route.length&&clear(a,route[j+1]))j++;points.push(route[j]);a=route[j];i=j+1;}
+ if(bestD>24*24&&!opt.silent)G.V11.toast('那边有墙或障碍，先开到能到达的位置。');
+ if(!points.length){this.auto=null;return false;}
+ this.auto={points,i:0,room:this.room,tx,ty};this._navStill=0;return true;
+};
+// An exit button is an explicit story action, not an unreachable point outside the wall.
+P.goExit=function(e){this.auto=null;this.send('去'+e.name);};
+})(typeof globalThis!=='undefined'?globalThis:this);
+
+</script>
+
+<script>
+/* DOR2 playability UI 1.2; original scene assets and story engine retained. */
+(function(){'use strict';
+const $=q=>document.querySelector(q),D=window.__dor,V=window.V11,L=V.DLG,M=V.MENU,P=V.PANEL,px=window.__px;
+const KEY='dor2_px12_session_v1',VERSION='1.2.0-playability';let lastKey='',lastGuide=null,undo=[],restoring=false,lastSave='',lastSys='',saveError=false,firstIdle=true;
+const shell=document.createElement('main');shell.id='play-shell';
+shell.innerHTML='<section id="stage"><header id="scene-heading"><b>真实的梦 2</b><small>第一章 · 操作修复版 1.2</small></header></section><aside id="guide" aria-label="当前目标与操作"><div class="eyebrow">DOR2 / 第一章</div><h1 id="guide-title"></h1><p id="guide-context"></p><div id="guide-actions"></div><details id="guide-explore"><summary>自由探索 · 地点、物体与其他动作</summary><div class="row-label">点地点移动 · 点物体选择动作</div><div id="explore-actions"></div></details><nav id="tool-actions" aria-label="工具"><button data-tool="log">回看刚才</button><button data-tool="tools">车灯 / 机械臂</button><button data-tool="drive">显示驾驶按钮</button><button data-tool="undo">撤回上一步</button><button data-tool="sound">声音</button><button data-tool="restart">重新开始</button></nav><p id="save-message" role="status" aria-live="polite"></p><div id="session-status"></div></aside>';
+document.body.insertBefore(shell,document.body.firstChild);$('#stage').append($('#browser'),$('#screen'));
+for(const id of ['#ask','#menu','#panel','#end'])document.body.append($(id));
+const reading=document.createElement('div');reading.id='reading-controls';reading.hidden=true;reading.innerHTML='<button type="button" id="read-next">继续 →</button><button type="button" class="secondary" id="read-log">回看</button>';$('#dlg').after(reading);
+const note=document.createElement('p');note.id='control-note';note.textContent='点地点或物体即可操作 · 电脑也可用 WASD / 方向键移动，空格继续';$('#screen').append(note);
+const tags=document.createElement('div');tags.id='visual-tags';tags.innerHTML='<span class="visual-tag self">你 · R07</span><span class="visual-tag dl">dl</span><span class="visual-tag destination">前往这里</span>';$('#view').append(tags);
+$('#btnB').textContent='工具';$('#dlg').setAttribute('role','region');$('#dlg').setAttribute('aria-label','当前剧情');$('#dlg').setAttribute('tabindex','0');$('#dlgMore').textContent='点这里或按空格继续 →';
+const narrativeBusy=()=>!!(L.cur||L.q.length||L.wait>0||L.reel||D.busy);
+const blocked=()=>narrativeBusy()||M.open||M.asking||P.open;
+function makeButton(label,fn,cls){const b=document.createElement('button');b.type='button';b.textContent=label;if(cls)b.className=cls;b.onclick=fn;return b;}
+function tell(t){lastSys=t;$('#save-message').textContent=t;}
+function continueReading(){
+ if(M.asking)return;if(P.open){P.close();return;}if(M.open){M.back();return;}
+ if(L.wait>0){L.wait=0;L.typing=0;if(L.after){L.after();L.after=null;}L.next();}
+ else if(L.cur||L.reel)L.a();else if(L.q.length)L.next();
+ render(true);persist();
+}
+function showLog(){const txt=L.log.map(x=>(x.kind==='dl'?'dl：':'')+x.text).join('\n\n');P.show('刚才的经历\n\n'+(txt||'还没有需要回看的对话。'));}
+$('#read-next').onclick=continueReading;$('#read-log').onclick=showLog;
+function invoke(a){
+ if(blocked())return;
+ px.sim.auto=null;px.sim._userTravel=false;px.sim.v=0;
+ if(a.obj)return px.ui.objMenu(a.obj);
+ if(a.whistle)return D.whistle();
+ if(a.fill){const stem=a.cmd.trim(),prompt=a.prompt||(stem==='写'?'写在表格上的话（最多 24 字）':stem==='回复'?'在旧帖子上回复':'对 dl 说什么？');return V.ask(prompt,text=>{let v=text.slice(0,stem==='写'?24:160);D.send(a.cmd+v);tell('你选择了：'+a.label);});}
+ tell('你选择了：'+a.label);D.send(a.cmd);render(true);
+}
+const origInput=window.DOR.Game.prototype.input;
+window.DOR.Game.prototype.input=function(text){
+ if(this===D.game&&!restoring){undo.push({game:this.save(),log:L.log.slice(),cmd:String(text)});if(undo.length>16)undo.shift();}
+ const blocks=origInput.call(this,text);
+ if(this===D.game){lastKey='';if(/^(去|跟|前进|后退)/.test(text))px.sim.auto=null;}
+ return blocks;
+};
+// Preserve important system feedback instead of silently filtering instructions.
+const onBlock=L.onBlock;L.onBlock=function(b,quiet){onBlock(b,quiet);if(!quiet&&b.k==='scene'){$('#toast').classList.remove('on');tell('');}if(!quiet&&b.k==='reel')L.log.push({kind:'record',text:'【影像记录】\n'+b.frames.map(f=>f.ts+' '+f.text).join('\n')});if(!quiet&&b.k==='record')L.log.push({kind:'record',text:'【记录】\n'+b.lines.join('\n')});if(!quiet&&b.k==='sys'&&b.text&&!/^附近：|视觉标注/.test(b.text)){tell(String(b.text).replace(/[〔〕〖〗]/g,''));}};
+// Keep complete paragraphs fast to read, but never auto-advance narrative pages.
+const say0=L.say;L.say=function(t,k){say0.call(this,t,k);if(this.cur)this.cur.n=this.cur.toks.length;};
+const a0=L.a;L.a=function(){a0.call(this);if(this.cur)this.cur.n=this.cur.toks.length;persist();};
+function render(force){
+ const s=D.game&&D.game.s,busy=narrativeBusy(),web=s&&s.phase==='web';
+ if(!s){const h=DORGuide(null);$('#guide-title').textContent=h.title;$('#guide-context').textContent=h.context;return;}
+ $('#guide').classList.toggle('is-reading',busy&&!web);
+ const key=[s.phase,s.room,s.spot,s.turn,busy,!!M.open,!!P.open,!!M.asking].join('/');
+ // Story state is calculated ahead of dialogue: do not reveal the next task before the player reads the scene.
+ if(!busy||!lastGuide||web)lastGuide=DORGuide(s);
+ const h=lastGuide;
+ if(force||key!==lastKey){lastKey=key;
+  const room=DOR.C.rooms[s.room];const spot=room&&room.spots&&room.spots[s.spot];
+  $('#scene-heading b').textContent=web?'一则 2019 年的旧帖子':busy?'R07 · 正在发生':(room?.name||s.room)+(spot?.name&&spot.name!==room?.name?' / '+spot.name:'');
+  $('#guide-title').textContent=busy&&!web?'先看完眼前发生的事':h.title;
+  $('#guide-context').textContent=busy&&!web?'画面下方是当前剧情。点“继续”逐段阅读；读完后，这里会显示你现在可以做的事。':h.context;
+  const aa=$('#guide-actions');aa.replaceChildren();
+  if(busy&&!web){aa.append(makeButton(L.reel?'看完这段影像 →':'继续 →',continueReading));}
+  else for(const a of h.actions){const b=makeButton(a.label,()=>invoke(a));b.dataset.command=a.cmd;b.disabled=!!blocked();aa.append(b);}
+  const ex=$('#explore-actions');ex.replaceChildren();const seen=new Set(h.actions.map(a=>a.cmd));
+  if(!busy&&!web){for(const a of D.game.actions()){if(seen.has(a.cmd))continue;seen.add(a.cmd);if(['前进','后退','左转','右转','转身'].includes(a.cmd))continue;
+    ex.append(makeButton((a.obj?'查看 · ':a.g==='移动'?'前往 · ':'')+a.label,()=>invoke(a),a.obj?'obj':''));}
+   for(const [label,cmd]of [['看看周围','环顾'],['等一会儿','等']])if(!seen.has(cmd))ex.append(makeButton(label,()=>invoke({label,cmd})));
+  }
+  $('#guide-explore').hidden=busy||web;$('#tool-actions [data-tool=tools]').disabled=!!blocked();$('#tool-actions [data-tool=undo]').disabled=!!D.busy||!undo.length||M.asking;
+  $('#session-status').textContent=(saveError?'浏览器禁止本地存储，关闭前请保留此页。':'进度自动保存在本机浏览器，不上传。')+' · '+VERSION;
+ }
+ reading.hidden=web||!busy||!!M.open||P.open;
+ $('#read-next').textContent=L.reel?'看完这段影像 →':L.wait>0?'继续，不等待动画 →':'继续 →';
+ $('#dlgMore').textContent='继续 →'+(L.cur&&L.cur.pages.length>1?'  '+(L.cur.i+1)+' / '+L.cur.pages.length:'');
+ updateTags(s,busy);
+}
+function updateTags(s,busy){
+ const sim=px.sim,R=px.R;const hide=s.phase==='web'||s.phase==='office1'||s.ended||s.f.blind||document.body.classList.contains('v11black');
+ const put=(el,x,y,shown)=>{let sx=x-R.camX,sy=y-R.camY;el.hidden=!shown||hide||sx<5||sx>315||sy<15||sy>178;if(!el.hidden){el.style.left=(sx/320*100)+'%';el.style.top=(sy/180*100)+'%';}};
+ put(tags.children[0],sim.x,sim.y-23,true);put(tags.children[1],sim.dl.x,sim.dl.y-24,sim.dl.vis&&s.dl.room===sim.room&&!busy);
+ put(tags.children[2],sim.auto?.tx||0,sim.auto?.ty||0,!!sim.auto&&!busy);
+}
+function snapshot(){if(!D.game)return null;return{version:VERSION,game:D.game.save(),cur:L.cur,q:L.q,wait:L.wait,reel:L.reel,log:L.log,undo:undo.slice(-8),panel:P.open?$('#panel .body').innerHTML:null,lastGuide,lastSys,sim:{room:px.sim.room,x:px.sim.x,y:px.sim.y,a:px.sim.a},time:Date.now()};}
+function persist(){if(restoring||!D.game)return;try{const x=snapshot();localStorage.setItem(KEY,JSON.stringify(x));saveError=false;}catch(e){saveError=true;}}
+async function settle(){for(let i=0;i<100&&D.busy;i++)await new Promise(r=>setTimeout(r,10));}
+async function restore(x){
+ if(!x||typeof x.game!=='string')throw new Error('存档内容不完整');
+ const state=JSON.parse(x.game);if(!state||!state.f||!state.w||!DOR.C.phases[state.phase])throw new Error('存档版本不兼容');
+ restoring=true;await settle();L.reset();M.close();P.close();$('#ask').classList.remove('on');M.asking=false;px.ui.reset();document.body.classList.toggle('web',state.phase==='web');document.body.classList.remove('v11black','black');
+ D.setSpeed(0);D.load(x.game);await settle();L.reset();P.close();D.game.s=state;
+ L.log=Array.isArray(x.log)?x.log:[];L.q=Array.isArray(x.q)?x.q:[];L.cur=x.cur||null;L.wait=0;L.typing=0;L.reel=x.reel||null;undo=Array.isArray(x.undo)?x.undo:undo;
+ lastGuide=x.lastGuide||DORGuide(D.game.s);lastSys=x.lastSys||'';px.sim.room=null;px.sim.sync();
+ if(x.sim&&x.sim.room===D.game.s.room&&Number.isFinite(x.sim.x)&&Number.isFinite(x.sim.y)){Object.assign(px.sim,x.sim);px.sim.nudgeFree();}
+ if(x.panel)P.show(x.panel,true);
+ if(L.cur)L.cur.n=L.cur.toks.length;L.update(0);restoring=false;lastKey='';render(true);tell(lastSys||'已恢复到离开时的进度。');px.ui.layout();persist();
+}
+async function restart(){restoring=true;await settle();L.reset();M.close();P.close();px.ui.reset();document.body.classList.add('web');document.body.classList.remove('v11black','black');undo=[];lastGuide=null;lastSys='';try{localStorage.removeItem(KEY);localStorage.removeItem(DOR_HOOK.saveKey);}catch(e){}D.setSpeed(0);D.load('invalid-new-game');await settle();restoring=false;firstIdle=true;lastKey='';render(true);px.ui.layout();persist();}
+$('#tool-actions').onclick=async e=>{
+ const b=e.target.closest('button');if(!b)return;switch(b.dataset.tool){
+ case'log':showLog();break;
+ case'tools':if(!blocked())px.ui.carMenu();break;
+ case'drive':document.body.classList.toggle('drive-mode');b.textContent=document.body.classList.contains('drive-mode')?'收起驾驶按钮':'显示驾驶按钮';tell('也可以直接点击画面内的空地、物体，或使用地点按钮。');break;
+ case'sound':D.setSound(!D.sound);D.savePref();b.textContent=D.sound?'声音：开':'声音：关';break;
+ case'undo':if(D.busy||!undo.length)return;if(!confirm('撤回到上一次操作之前？只撤回你这一步，不替换成标准路线。'))return;{let x=undo.pop();let keep=undo.slice();await restore({game:x.game,log:x.log,undo:keep});tell('已撤回：'+x.cmd);}break;
+ case'restart':if(confirm('重新开始第一章？本机当前进度会被清除。'))await restart();break;
+ }
+};
+// Only expose genuine help/recovery; the old skip routine fabricated a standard-route save.
+window.__help.hint=()=>DORGuide(D.game?.s).context;
+window.__help.skip=async()=> '本版不替换你的选择。请使用当前目标，或撤回上一步。';
+window.DOR12={version:VERSION,guide:DORGuide,render,invoke,continue:continueReading,restore,restart,persist,get snapshot(){return snapshot();},get undo(){return undo;}};
+let stored=null;try{stored=JSON.parse(localStorage.getItem(KEY)||'null');}catch(e){saveError=true;}
+const start=$('#start');start.innerHTML='<h1>真实的梦 2</h1><p>第一章 · 重新连接<br>一条七年前的远程参观链接。<br>你会控制一辆小车，遇到一个仍在工作的人。</p><p style="font-size:13px">读对话时点“继续”，行动时点写明动作的按钮。<br>不必猜口令，也不必熟悉游戏手柄。</p>';
+if(stored&&stored.game)start.append(makeButton('继续上次的连接',async()=>{try{start.style.display='none';await restore(stored);}catch(e){start.style.display='flex';tell('存档无法恢复，可以从头开始。');}}));
+else{let old=null;try{old=localStorage.getItem(DOR_HOOK.saveKey);}catch(e){}if(old)start.append(makeButton('继续旧版进度',async()=>{try{start.style.display='none';await restore({game:old});}catch(e){start.style.display='flex';}}));}
+start.append(makeButton(stored?'从头开始':'开始连接',()=>{start.style.display='none';restart();}));
+$('#end button').onclick=()=>{}; // original listener is replaced in the source patch
+window.addEventListener('pagehide',persist);document.addEventListener('visibilitychange',()=>{if(document.hidden)persist();});
+setInterval(()=>{render();},120);setInterval(persist,1800);px.ui.layout();render(true);
 })();
 
 </script>
